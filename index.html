@@ -6,7 +6,7 @@
   <meta name="description" content="ICCT QR Code-Based Attendance System for Students and Professors. Learn how to register, scan, and track attendance.">
   <meta name="keywords" content="ICCT, QR Code, Attendance System, Student Portal, Professor Portal">
   <meta name="author" content="ICCT Colleges">
-  <title>AttendEase </title>
+  <title>AttendEase</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <style>
     * {
@@ -24,21 +24,23 @@
       height: 100vh;
       color: #fff;
       text-align: center;
-      overflow: auto; /* Allow scrolling if content overflows */
+      overflow: auto;
     }
     .container {
-      display: flex;
-      flex-direction: column;
-      max-width: 900px;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.7); /* Darker background for better readability */
-      border-radius: 15px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(10px);
-      overflow: hidden;
-      max-height: 95vh; /* Ensure container does not exceed viewport height */
-      animation: fadeIn 1s ease-out;
-    }
+    display: flex;
+    flex-direction: column;
+    max-width: 900px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    /* Remove or adjust this line */
+    /* max-height: 95vh; */
+    height: auto; /* Allow the container to grow with content */
+    animation: fadeIn 1s ease-out;
+  }
     .header {
       padding: 2rem;
       background: rgba(255, 255, 255, 0.1);
@@ -66,8 +68,8 @@
       flex: 1;
       border-right: 1px solid rgba(255, 255, 255, 0.2);
       text-align: left;
-      max-height: 70vh; /* Limit height of the left section */
-      overflow-y: auto; /* Enable vertical scrolling */
+      max-height: 70vh;
+      overflow-y: auto;
     }
     .left h2 {
       font-size: 1.8rem;
@@ -86,7 +88,14 @@
       align-items: center;
       text-align: center;
     }
-    .right a {
+    .action-container {
+      text-align: center;
+      margin: 2rem 0;
+    }
+    .checkbox-container {
+      margin-bottom: 1rem;
+    }
+    .action-container a {
       display: inline-block;
       padding: 1rem 2rem;
       font-size: 1.2rem;
@@ -95,9 +104,12 @@
       border-radius: 8px;
       background: linear-gradient(135deg, #6a11cb, #2575fc);
       transition: background 0.3s ease, transform 0.3s ease;
-      margin: 1rem 0;
     }
-    .right a:hover {
+    .action-container a.disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+    .action-container a:hover {
       background: linear-gradient(135deg, #2575fc, #6a11cb);
       transform: scale(1.1);
     }
@@ -107,26 +119,6 @@
       border-top: 1px solid rgba(255, 255, 255, 0.2);
       font-size: 0.9rem;
       text-align: center;
-    }
-    @media (max-width: 768px) {
-      .content {
-        flex-direction: column;
-      }
-      .left {
-        border-right: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-      }
-      .right {
-        margin-top: 1rem;
-      }
-    }
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
     }
   </style>
 </head>
@@ -143,37 +135,62 @@
         Go to the Registration Page (URL provided by your professor).<br>
         Fill in the required fields (Full Name, Student ID, Password, Course, Section).<br>
         Click Register and wait for confirmation.</p>
-
+    
         <p><strong>🎟️ 2. Getting Your QR Code</strong><br>
         After logging in, your QR Code will automatically generate. Save or print it and bring it to every class.</p>
-
+    
         <p><strong>🏫 3. Scanning Attendance in Class</strong><br>
         Locate the QR Code Scanner in your classroom, present your QR code, and wait for the buzzer to confirm a successful scan.</p>
-
+    
         <p><strong>🚫 4. Rules and Guidelines</strong><br>
         Do not share your QR code. Scan only during the allowed attendance window. Report issues to the professor or admin.</p>
-
+    
         <p><strong>📋 5. Verifying Your Attendance</strong><br>
         Check your attendance through the Student Dashboard after logging in.</p>
-
+    
         <p><strong>🛠️ 6. Troubleshooting</strong><br>
         <strong>No buzzer sound:</strong> Ensure the QR code is clear and steady.<br>
         <strong>Scan rejected:</strong> Verify your section is registered.<br>
         <strong>Attendance not showing:</strong> Refresh the dashboard or contact the admin.<br>
         <strong>Login issues:</strong> Reset credentials if necessary.</p>
-
+    
         <p><strong>📞 7. Support</strong><br>
         For issues, contact:<br>
         <strong>Admin Email:</strong> admin@icct.edu.ph<br>
         <strong>Office Hours:</strong> Monday to Friday, 9AM–5PM</p>
-      </section>
-      <section class="right">
-        <a href="LogIn.html" role="button" aria-label="Log in or register">Log In / Register</a>
+    
+        <!-- Moved the action-container here -->
+        <div class="action-container">
+          <div class="checkbox-container">
+            <input type="checkbox" id="termsCheckbox" />
+            <label for="termsCheckbox">I have read and understood the instructions above.</label>
+          </div>
+          <a href="LogIn.html" role="button" aria-label="Log in or register" id="proceedButton" class="disabled" onclick="return validateCheckbox()">Log In / Register</a>
+        </div>
       </section>
     </main>
     <footer>
       &copy; 2025 Attendance Platform. All rights reserved.
     </footer>
   </div>
+  <script>
+    const checkbox = document.getElementById('termsCheckbox');
+    const proceedButton = document.getElementById('proceedButton');
+
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) {
+        proceedButton.classList.remove('disabled');
+        proceedButton.removeAttribute('onclick');
+      } else {
+        proceedButton.classList.add('disabled');
+        proceedButton.setAttribute('onclick', 'return validateCheckbox()');
+      }
+    });
+
+    function validateCheckbox() {
+      alert('Please check the box to proceed.');
+      return false;
+    }
+  </script>
 </body>
 </html>
