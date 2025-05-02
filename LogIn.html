@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication</title>
+  <style>
+    /* --- Your existing CSS --- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #7c7c7c, #3d3d3d);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
+      overflow: hidden;
+    }
+    .container {
+      display: flex;
+      width: 90%;
+      max-width: 1200px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+    .form-section {
+      flex: 1;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+      position: relative;
+    }
+    .register-section {
+      background: linear-gradient(135deg, #bebebe, #185a9d);
+      color: #004d40;
+    }
+    .login-section {
+      background: linear-gradient(135deg, #4e4e4e, #272727);
+      color: #e0e0e0;
+    }
+    .form-section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      font-weight: 600;
+    }
+    .form-section input {
+      padding: 15px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      margin: 10px 0;
+      font-size: 1rem;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .form-section input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .form-section input:focus {
+      border-color: #4caf50;
+      box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+      outline: none;
+    }
+    .form-section button {
+      padding: 15px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #4caf50, #81c784);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+      width: 100%;
+    }
+    .login-section button {
+      background: linear-gradient(135deg, #7b1fa2, #ab47bc);
+    }
+    .login-section button:hover {
+      background: linear-gradient(135deg, #ab47bc, #7b1fa2);
+    }
+    .form-section button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #81c784, #4caf50);
+    }
+    .form-section p {
+      font-size: 14pt;
+      color: #00ff22;
+      text-align: center;
+    }
+    .form-section .alternative {
+      font-size: 1rem;
+      margin-top: 20px;
+    }
+    .register-section .alternative a {
+      color: #004d40;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    .login-section .alternative a {
+      color: #e0e0e0;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    .form-section .alternative a:hover {
+      text-decoration: none;
+    }
+    .register-section:hover {
+      transform: scale(1.03);
+      box-shadow: 0 20px 50px rgba(67, 206, 162, 0.3);
+    }
+    .login-section:hover {
+      transform: scale(1.03);
+      box-shadow: 0 20px 50px rgba(106, 17, 203, 0.3);
+    }
+    @media (max-width: 768px) {
+      .container { flex-direction: column; }
+      .form-section { padding: 2rem; }
+      .form-section h2 { font-size: 2rem; }
+      .form-section input, .form-section button { padding: 12px; font-size: 1rem; }
+    }
+    @media (max-width: 480px) {
+      .form-section { padding: 1.5rem; }
+      .form-section h2 { font-size: 1.5rem; }
+      .form-section input, .form-section button { padding: 10px; font-size: 0.9rem; }
+    }
+    #course {
+      padding: 15px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      margin: 10px 0;
+      font-size: 1rem;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      appearance: none;
+      background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="white" d="M2 0L0 2h4L2 0zM2 5L0 3h4l-2 2z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 12px;
+    }
+    #course option {
+      color: rgba(255, 255, 255, 0.7);
+      background: #4e4e4e;
+    }
+    #course:focus {
+      border-color: #4caf50;
+      box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+      outline: none;
+    }
+    /* Password toggle icon */
+    .password-toggle {
+      position: absolute;
+      right: 40px;
+      top: 49%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 18px;
+      color: #fff;
+    }
+    h2{
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <!-- Register Section -->
+  <div class="form-section register-section">
+    <h2>Register</h2>
+    <form id="registerForm">
+      <input type="text" name="username" placeholder="Full Name: (Ex. Bautista, John)" required>
+      <input type="text" name="student_id" placeholder="Student ID" required>
+      <div style="position: relative; width: 100%;">
+        <input type="password" id="registerPassword" name="password" placeholder="Password" required>
+        <span class="password-toggle" onclick="togglePassword('registerPassword', this)">👁️</span>
+      </div>
+      <select id="course" name="course" required>
+        <option value="" disabled selected>Select Course</option>
+        <option value="ACT">ACT</option>
+        <option value="BSCS">BSCS</option>
+        <option value="BSIT">BSIT</option>
+        <option value="BSIS">BSIS</option>
+      </select>        
+      <input type="text" name="section" placeholder="Section" required>
+      <button type="submit">Register</button>
+      <p id="message"></p>
+    </form>
+  </div>
+
+  <!-- Login Section -->
+  <div class="form-section login-section">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="text" name="username" placeholder="Full Name" required>
+      <div style="position: relative; width: 100%;">
+        <input type="password" id="loginPassword" name="password" placeholder="Password" required>
+        <span class="password-toggle" onclick="togglePassword('loginPassword', this)">👁️</span>
+      </div>
+      <button type="submit">Login</button>
+      <p id="loginMessage"></p>
+    </form>
+  </div>
+</div>
+
+<script>
+const scriptURL = 'https://script.google.com/macros/s/AKfycbx8HacEt687VPeg5EpAT39n4gEdt3vhs8QXVBhH1ChVpJFtYgiN_WDKIKqH2YMlp3D6/exec ';
+
+
+document.getElementById('registerForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  formData.append('action', 'register');
+
+  fetch(scriptURL, { method: 'POST', body: formData })
+    .then(res => res.text())
+    .then(msg => {
+      if (msg === 'Student account already registered') {
+        alert('Student ID is already registered.');
+      } else {
+        document.getElementById('message').innerText = msg;
+        alert('Account Created. You can now log in.');
+        window.location.href = 'LogIn.html';
+      }
+    });
+});
+
+
+// Handle login form submission
+document.getElementById('loginForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  formData.append('action', 'login');
+
+  fetch(scriptURL, { method: 'POST', body: formData })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        localStorage.setItem('user', JSON.stringify(data));
+        window.location.href = 'dashboard.html';
+      } else {
+        document.getElementById('loginMessage').innerText = data.message;
+      }
+    })
+    .catch(error => {
+      console.error('Error during login:', error);
+      document.getElementById('loginMessage').innerText = 'An error occurred. Please try again.';
+    });
+});
+
+// Toggle Password Visibility
+function togglePassword(id, eyeIcon) {
+  const input = document.getElementById(id);
+  if (input.type === "password") {
+    input.type = "text";
+    eyeIcon.innerText = '🙈';
+  } else {
+    input.type = "password";
+    eyeIcon.innerText = '👁️';
+  }
+}
+</script>
+
+</body>
+</html>
