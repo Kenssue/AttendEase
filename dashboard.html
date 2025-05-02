@@ -218,34 +218,80 @@
     body.no-scroll {
       overflow: hidden;
     }
-
     @media (max-width: 1024px) {
-      .left-section {
-        width: 70%;
-      }
-
-      .right-section {
-        margin-left: 70%;
-      }
-
-      .right-section.fullscreen {
-        margin-left: 0;
-      }
+    .left-section {
+      width: 70%;
     }
 
-    @media (max-width: 480px) {
-      .left-section {
-        width: 100%;
-      }
-
-      .right-section {
-        margin-left: 100%;
-      }
-
-      .right-section.fullscreen {
-        margin-left: 0;
-      }
+    .right-section {
+      margin-left: 70%;
+      transform: scale(0.95); /* Slightly zoomed out for better visibility */
+      padding: 15px; /* Adjust padding for smaller screens */
     }
+
+    .right-section.fullscreen {
+      margin-left: 0;
+      transform: scale(1); /* Fullscreen view */
+    }
+
+    table th, table td {
+      font-size: 0.85rem; /* Adjust font size for better readability */
+      padding: 10px; /* Reduce padding for smaller screens */
+    }
+  }
+
+  @media (max-width: 768px) {
+    .left-section {
+      width: 100%;
+    }
+
+    .right-section {
+      margin-left: 100%;
+      transform: scale(0.9); /* Further zoom out for compact view */
+      padding: 10px; /* Reduce padding further */
+    }
+
+    .right-section.fullscreen {
+      margin-left: 0;
+      transform: scale(1); /* Fullscreen view */
+    }
+
+    table th, table td {
+      font-size: 0.8rem; /* Further reduce font size */
+      padding: 8px; /* Compact padding */
+    }
+  }
+
+  @media (max-width: 480px) {
+    .left-section {
+      width: 100%;
+    }
+
+    .right-section {
+      margin-left: 100%;
+      transform: scale(0.85); /* Compact view for very small screens */
+      padding: 5px; /* Minimal padding */
+    }
+
+    .right-section.fullscreen {
+      margin-left: 0;
+      transform: scale(1); /* Fullscreen view */
+    }
+
+    table th, table td {
+      font-size: 0.75rem; /* Smallest font size for readability */
+      padding: 5px; /* Minimal padding */
+    }
+
+    h2 {
+      font-size: 1.5rem; /* Adjust title size */
+    }
+
+    .controls input, .controls select {
+      font-size: 0.9rem; /* Adjust control font size */
+      padding: 8px; /* Compact control padding */
+    }
+  }
   </style>
 </head>
 <body>
