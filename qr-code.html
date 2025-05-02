@@ -189,7 +189,11 @@
     }
 
     .right-section {
-      margin-left: 50%;
+      margin-left: 50%; /* Matches the left-section width */
+    }
+
+    .right-section.fullscreen {
+      margin-left: 0;
     }
 
     .qr-code-container {
@@ -208,7 +212,7 @@
     }
 
     .right-section {
-      margin-left: 100%;
+      margin-left: 100%; /* Matches the left-section width */
     }
 
     .right-section.fullscreen {
@@ -327,7 +331,7 @@
 
         document.getElementById('logoutBtn').addEventListener('click', () => {
           localStorage.removeItem('user');
-          window.location.href = 'index.html';
+          window.location.href = 'login.html';
         });
 
         document.getElementById('dashboardBtn').addEventListener('click', () => {
