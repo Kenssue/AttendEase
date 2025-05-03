@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html>  
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -37,13 +37,13 @@
       padding: 20px;
       box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
       border-right: 1px solid #ddd;
-      transform: translateX(0); /* Sidebar is visible by default */
+      transform: translateX(0); 
       transition: transform 0.3s ease;
       z-index: 999;
     }
 
     .left-section.hide {
-      transform: translateX(-100%); /* Hide the sidebar */
+      transform: translateX(-100%);
     }
 
     .user-info {
@@ -106,13 +106,13 @@
       position: relative;
       flex: 1;
       transition: transform 0.3s ease, margin-left 0.3s ease;
-      transform: scale(0.9); /* Dashboard is zoomed out by default */
-      margin-left: 25%; /* Adjust for sidebar width */
+      transform: scale(0.9); 
+      margin-left: 25%; 
     }
 
     .right-section.fullscreen {
-      transform: scale(1); /* Zoom in the dashboard */
-      margin-left: 0; /* Reset margin when sidebar is hidden */
+      transform: scale(1); 
+      margin-left: 0; 
     }
 
     h2 {
@@ -225,18 +225,18 @@
 
     .right-section {
       margin-left: 70%;
-      transform: scale(0.95); /* Slightly zoomed out for better visibility */
-      padding: 15px; /* Adjust padding for smaller screens */
+      transform: scale(0.95); 
+      padding: 15px; 
     }
 
     .right-section.fullscreen {
       margin-left: 0;
-      transform: scale(1); /* Fullscreen view */
+      transform: scale(1); 
     }
 
     table th, table td {
-      font-size: 0.85rem; /* Adjust font size for better readability */
-      padding: 10px; /* Reduce padding for smaller screens */
+      font-size: 0.85rem; 
+      padding: 10px; 
     }
   }
 
@@ -247,18 +247,18 @@
 
     .right-section {
       margin-left: 100%;
-      transform: scale(0.9); /* Further zoom out for compact view */
-      padding: 10px; /* Reduce padding further */
+      transform: scale(0.9); 
+      padding: 10px; 
     }
 
     .right-section.fullscreen {
       margin-left: 0;
-      transform: scale(1); /* Fullscreen view */
+      transform: scale(1); 
     }
 
     table th, table td {
-      font-size: 0.8rem; /* Further reduce font size */
-      padding: 8px; /* Compact padding */
+      font-size: 0.8rem; 
+      padding: 8px; 
     }
   }
 
@@ -269,41 +269,41 @@
 
     .right-section {
       margin-left: 100%;
-      transform: scale(0.85); /* Compact view for very small screens */
-      padding: 5px; /* Minimal padding */
+      transform: scale(0.85); 
+      padding: 5px; 
     }
 
     .right-section.fullscreen {
       margin-left: 0;
-      transform: scale(1); /* Fullscreen view */
+      transform: scale(1);
     }
 
     table th, table td {
-      font-size: 0.75rem; /* Smallest font size for readability */
-      padding: 5px; /* Minimal padding */
+      font-size: 0.75rem; 
+      padding: 5px; 
     }
 
     h2 {
-      font-size: 1.5rem; /* Adjust title size */
+      font-size: 1.5rem; 
     }
 
     .controls input, .controls select {
-      font-size: 0.9rem; /* Adjust control font size */
-      padding: 8px; /* Compact control padding */
+      font-size: 0.9rem; 
+      padding: 8px; 
     }
   }
   </style>
 </head>
 <body>
 
-  <!-- Burger Icon -->
+  
   <div class="burger" id="burgerBtn">
     <span></span>
     <span></span>
     <span></span>
   </div>
 
-  <!-- Sidebar -->
+
   <div class="left-section" id="sidebar">
     <div class="user-info">
       <h3>Student Information</h3>
@@ -321,7 +321,6 @@
     </div>
   </div>
 
-  <!-- Main Content -->
   <div class="right-section" id="mainContent">
     <h2 id="attendanceTitle">Attendance of</h2>
     <div class="controls">
@@ -356,15 +355,14 @@
     const mainContent = document.getElementById('mainContent');
     const body = document.body;
 
-    // Toggle sidebar and dashboard zoom effect
+    
     burgerBtn.addEventListener('click', () => {
       sidebar.classList.toggle('hide');
       burgerBtn.classList.toggle('active');
       mainContent.classList.toggle('fullscreen');
-      body.classList.toggle('no-scroll'); // Prevent scrolling when sidebar is open
+      body.classList.toggle('no-scroll'); 
     });
 
-    // Close sidebar when clicking outside of it
     document.addEventListener('click', (event) => {
       if (!sidebar.contains(event.target) && !burgerBtn.contains(event.target)) {
         sidebar.classList.add('hide');
@@ -386,7 +384,7 @@
       document.getElementById('course').value = user.course;
       document.getElementById('section').value = user.section;
 
-      // Show date in the dashboard title
+      
       const today = new Date();
       const formattedDate = `${today.toLocaleString('en-US', { month: 'long' })} ${today.getDate()}, ${today.getFullYear()}`;
       document.getElementById('attendanceTitle').textContent = `Attendance of ${formattedDate}`;
@@ -394,14 +392,14 @@
       const formData = new FormData();
       formData.append('action', 'getClassmates');
       formData.append('section', user.section);
-      formData.append('course', user.course);  // Added course to the request
+      formData.append('course', user.course);  
 
       fetch(scriptURL, { method: 'POST', body: formData })
         .then(res => res.json())
         .then(data => {
           if (data.success) {
             classmatesData = data.classmates;
-            classmatesData.sort((a, b) => a.full_name.localeCompare(b.full_name));  // Sort the data A-Z
+            classmatesData.sort((a, b) => a.full_name.localeCompare(b.full_name));  
             renderTable(classmatesData);
           }
         });
@@ -448,21 +446,37 @@
     }
 
     function applyFilters() {
-      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-      const statusFilter = document.getElementById('statusFilter').value;
+  const searchTerm = document.getElementById('searchInput').value.toLowerCase();  
+  const statusFilter = document.getElementById('statusFilter').value;  
 
-      const filteredData = classmatesData.filter(student => {
-        const matchesSearch = student.full_name.toLowerCase().includes(searchTerm) || student.student_id.toString().includes(searchTerm);
-        const matchesStatus = statusFilter === 'all' || student.status.toLowerCase() === statusFilter;
+  const filteredData = classmatesData.filter(student => {  
+    const matchesSearch = student.full_name.toLowerCase().includes(searchTerm) || student.student_id.toString().includes(searchTerm);  
+    
+    let matchesStatus = false;
+    let matchesTimestamp = false;
 
-        return matchesSearch && matchesStatus;
-      });
+    if (statusFilter === 'all') {
+      matchesStatus = true; 
+      matchesTimestamp = true;
+    } else if (statusFilter === 'present') {
+    
+      matchesStatus = student.status.toLowerCase() === 'present';
+      matchesTimestamp = student.timestamp !== ""; 
+    } else if (statusFilter === 'absent') {
 
-      renderTable(filteredData);
+      matchesStatus = student.status === "";
+      matchesTimestamp = student.timestamp === ""; 
     }
 
-    document.getElementById('searchInput').addEventListener('input', applyFilters);
-    document.getElementById('statusFilter').addEventListener('change', applyFilters);
+    return matchesSearch && matchesStatus && matchesTimestamp;  
+  });
+
+  renderTable(filteredData);  
+}
+
+document.getElementById('searchInput').addEventListener('input', applyFilters);  
+document.getElementById('statusFilter').addEventListener('change', applyFilters);
+
 
     document.getElementById('logoutBtn').addEventListener('click', () => {
       localStorage.removeItem('user');
@@ -476,21 +490,19 @@
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
   
-      // Get the current date in MM-DD-YYYY format
+    
       const today = new Date();
       const formattedDate = `${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}-${today.getFullYear()}`;
 
-      // Get section from the logged-in user's data
-      const section = user.section; // Assuming `user` contains the logged-in student's data
+      const section = user.section;
 
-      // Set the filename for the PDF
       const fileName = `attendance_${section}_${formattedDate}.pdf`;
 
-      // Set PDF title and add date and section to the document
+
       doc.text(`Attendance Report of ${formattedDate}`, 20, 10);
       doc.text(`Section: ${section}`, 20, 20);
 
-      // Add table content
+      
       const tableColumn = ["Student ID", "Student Name", "Course", "Status", "Timestamp"];
       const tableRows = classmatesData.map(student => [
         student.student_id,
@@ -507,12 +519,12 @@
         theme: 'grid'
       });
 
-      // Save the PDF with the filename
+   
       doc.save(fileName);
     });
 
     document.getElementById('sortBtn').addEventListener('click', () => {
-      classmatesData.sort((a, b) => a.full_name.localeCompare(b.full_name));  // Sort the data A-Z
+      classmatesData.sort((a, b) => a.full_name.localeCompare(b.full_name));  
       renderTable(classmatesData);
     });
   </script>
