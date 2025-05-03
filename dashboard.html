@@ -6,6 +6,23 @@
   <title> Dashboard</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.22/jspdf.plugin.autotable.min.js"></script>
+  <script src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
+<script>
+    DisableDevtool({
+    });
+    document.addEventListener('keydown', e => {
+      if (
+        (e.ctrlKey && e.key.toLowerCase() === 's') || // Save
+        (e.ctrlKey && e.key.toLowerCase() === 'c') || // Copy
+        (e.ctrlKey && e.key.toLowerCase() === 'v') || // Paste
+        (e.ctrlKey && e.key.toLowerCase() === 'x') || // Cut
+        (e.ctrlKey && e.key.toLowerCase() === 'a') || // Select All
+        (e.ctrlKey && e.key.toLowerCase() === 'p')    // Print
+      ) {
+        e.preventDefault();
+      }
+    });
+</script>
   <style>
     * {
       box-sizing: border-box;
