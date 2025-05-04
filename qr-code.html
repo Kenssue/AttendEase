@@ -359,20 +359,6 @@
       console.error('Error loading user data:', error);
       window.location.href = 'login.html';
     }
-
-    document.addEventListener('contextmenu', function(e) {
-  e.preventDefault();
-});
-document.addEventListener('touchstart', function(e) {
-  if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'SELECT') {
-    e.preventDefault();
-  }
-}, { passive: false });
-['copy', 'cut', 'paste'].forEach(evt =>
-  document.addEventListener(evt, function(e) {
-    e.preventDefault();
-  })
-);
   </script>
 </body>
 </html>
