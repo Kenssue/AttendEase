@@ -9,6 +9,25 @@
   <title>AttendEase | ICCT Attendance System</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
+<script>
+    DisableDevtool({
+    });
+    document.addEventListener('keydown', e => {
+      if (
+        (e.ctrlKey && e.key.toLowerCase() === 's') ||
+        (e.ctrlKey && e.key.toLowerCase() === 'c') || 
+        (e.ctrlKey && e.key.toLowerCase() === 'v') || 
+        (e.ctrlKey && e.key.toLowerCase() === 'x') || 
+        (e.ctrlKey && e.key.toLowerCase() === 'a') ||
+        (e.ctrlKey && e.key.toLowerCase() === 'p')   
+      ) {
+        e.preventDefault();
+      }
+    });
+</script>
+  
   <style>
     :root {
       --primary: #6a11cb;
