@@ -274,7 +274,7 @@ body {
 }
 
 .toggle-sidebar {
-  display: flex;
+  display: none; /* Hide by default */
   align-items: center;
   justify-content: center;
   position: fixed;
@@ -294,7 +294,7 @@ body {
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
-
+    
 .toggle-sidebar:hover {
   background: rgba(255, 255, 255, 0.25);
   transform: scale(1.08);
@@ -396,33 +396,33 @@ body {
 }
 
 /* Responsive Styles */
-@media (max-width: 1200px) {
-  .sidebar {
-    width: 280px;
-  }
-  .main-content {
-    margin-left: 280px;
-    width: calc(100% - 280px);
-  }
-}
+    @media (max-width: 1200px) {
+      .sidebar {
+        width: 280px;
+      }
+      .main-content {
+        margin-left: 280px;
+        width: calc(100% - 280px);
+      }
+    }
 
-@media (max-width: 992px) {
-  .sidebar {
-    width: 260px;
-    padding: 1.2rem;
-  }
-  .main-content {
-    margin-left: 260px;
-    width: calc(100% - 260px);
-    padding: 1.2rem;
-  }
-  .sidebar-btn {
-    padding: 0.8rem;
-    font-size: 0.9rem;
-  }
-}
+    @media (max-width: 992px) {
+      .sidebar {
+        width: 260px;
+        padding: 1.2rem;
+      }
+      .main-content {
+        margin-left: 260px;
+        width: calc(100% - 260px);
+        padding: 1.2rem;
+      }
+      .sidebar-btn {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+      }
+    }
 
-@media (max-width: 768px) {
+    @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
     width: 280px;
@@ -436,7 +436,7 @@ body {
     padding: 1rem;
   }
   .toggle-sidebar {
-    display: block;
+    display: flex; /* Show toggle button on mobile */
   }
   .header {
     margin-top: 2.5rem;
@@ -455,137 +455,137 @@ body {
   }
 }
 
-@media (max-width: 576px) {
-  .sidebar {
-    width: 260px;
-  }
-  .page-title {
-    font-size: 1.3rem;
-  }
-  .date-display {
-    font-size: 0.8rem;
-  }
-  .search-input {
-    min-width: 100%;
-  }
-  .attendance-table th,
-  .attendance-table td {
-    font-size: 0.8rem;
-    padding: 0.5rem;
-  }
-  .status-badge {
-    font-size: 0.7rem;
-  }
-  .student-count {
-    font-size: 0.75rem;
-  }
-}
+    @media (max-width: 576px) {
+      .sidebar {
+        width: 260px;
+      }
+      .page-title {
+        font-size: 1.3rem;
+      }
+      .date-display {
+        font-size: 0.8rem;
+      }
+      .search-input {
+        min-width: 100%;
+      }
+      .attendance-table th,
+      .attendance-table td {
+        font-size: 0.8rem;
+        padding: 0.5rem;
+      }
+      .status-badge {
+        font-size: 0.7rem;
+      }
+      .student-count {
+        font-size: 0.75rem;
+      }
+    }
 
-/* Extra small devices (phones, 360px and down) */
-@media (max-width: 360px) {
-  body {
-    font-size: 14px;
-  }
-  .main-content {
-    padding: 0.8rem;
-  }
-  .sidebar {
-    width: 100%;
-    max-width: 300px;
-  }
-  .sidebar-header h2 {
-    font-size: 1.3rem;
-  }
-  .info-group label {
-    font-size: 0.8rem;
-  }
-  .info-group .info-value {
-    font-size: 0.85rem;
-    padding: 0.6rem;
-  }
-  .sidebar-btn {
-    padding: 0.7rem;
-    font-size: 0.85rem;
-  }
-  .page-title {
-    font-size: 1.2rem;
-  }
-  .table-container {
-    padding: 0.5rem;
-  }
-  .attendance-table {
-    display: block;
-    width: 100%;
-  }
-  .attendance-table thead,
-  .attendance-table tbody,
-  .attendance-table tr,
-  .attendance-table th,
-  .attendance-table td {
-    display: block;
-  }
-  .attendance-table thead tr {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-  }
-  .attendance-table tr {
-    margin-bottom: 0.8rem;
-    border: 1px solid rgba(67, 97, 238, 0.1);
-    border-radius: var(--border-radius);
-  }
-  .attendance-table td {
-    padding: 0.5rem;
-    border: none;
-    border-bottom: 1px solid rgba(67, 97, 238, 0.05);
-    position: relative;
-    padding-left: 40%;
-  }
-  .attendance-table td:before {
-    position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
-    width: 35%;
-    padding-right: 0.5rem;
-    white-space: nowrap;
-    content: attr(data-label);
-    font-weight: 600;
-    color: var(--primary);
-  }
-  .attendance-table td:last-child {
-    border-bottom: none;
-  }
-  .status-badge {
-    font-size: 0.65rem;
-  }
-  .student-count {
-    font-size: 0.75rem;
-  }
-}
+    /* Extra small devices (phones, 360px and down) */
+    @media (max-width: 360px) {
+      body {
+        font-size: 14px;
+      }
+      .main-content {
+        padding: 0.8rem;
+      }
+      .sidebar {
+        width: 100%;
+        max-width: 300px;
+      }
+      .sidebar-header h2 {
+        font-size: 1.3rem;
+      }
+      .info-group label {
+        font-size: 0.8rem;
+      }
+      .info-group .info-value {
+        font-size: 0.85rem;
+        padding: 0.6rem;
+      }
+      .sidebar-btn {
+        padding: 0.7rem;
+        font-size: 0.85rem;
+      }
+      .page-title {
+        font-size: 1.2rem;
+      }
+      .table-container {
+        padding: 0.5rem;
+      }
+      .attendance-table {
+        display: block;
+        width: 100%;
+      }
+      .attendance-table thead,
+      .attendance-table tbody,
+      .attendance-table tr,
+      .attendance-table th,
+      .attendance-table td {
+        display: block;
+      }
+      .attendance-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
+      .attendance-table tr {
+        margin-bottom: 0.8rem;
+        border: 1px solid rgba(67, 97, 238, 0.1);
+        border-radius: var(--border-radius);
+      }
+      .attendance-table td {
+        padding: 0.5rem;
+        border: none;
+        border-bottom: 1px solid rgba(67, 97, 238, 0.05);
+        position: relative;
+        padding-left: 40%;
+      }
+      .attendance-table td:before {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        width: 35%;
+        padding-right: 0.5rem;
+        white-space: nowrap;
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--primary);
+      }
+      .attendance-table td:last-child {
+        border-bottom: none;
+      }
+      .status-badge {
+        font-size: 0.65rem;
+      }
+      .student-count {
+        font-size: 0.75rem;
+      }
+    }
 
-/* Very small devices (phones, 320px and down) */
-@media (max-width: 320px) {
-  .main-content {
-    padding: 0.6rem;
-  }
-  .sidebar {
-    padding: 1rem;
-  }
-  .sidebar-btn {
-    padding: 0.6rem;
-    font-size: 0.8rem;
-  }
-  .info-group .info-value {
-    padding: 0.5rem;
-  }
-  .attendance-table td {
-    padding-left: 45%;
-    font-size: 0.75rem;
-  }
-  .attendance-table td:before {
-    font-size: 0.7rem;
-  }
-}
+    /* Very small devices (phones, 320px and down) */
+    @media (max-width: 320px) {
+      .main-content {
+        padding: 0.6rem;
+      }
+      .sidebar {
+        padding: 1rem;
+      }
+      .sidebar-btn {
+        padding: 0.6rem;
+        font-size: 0.8rem;
+      }
+      .info-group .info-value {
+        padding: 0.5rem;
+      }
+      .attendance-table td {
+        padding-left: 45%;
+        font-size: 0.75rem;
+      }
+      .attendance-table td:before {
+        font-size: 0.7rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -891,42 +891,29 @@ body {
     }
   
     // Event Listeners
-    toggleSidebarBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('visible');
-      sidebarOverlay.classList.toggle('visible');
-      document.body.style.overflow = sidebar.classList.contains('visible') ? 'hidden' : 'auto';
-    });
-  
-    sidebarOverlay.addEventListener('click', () => {
+    // Event Listeners
+toggleSidebarBtn.addEventListener('click', () => {
+  sidebar.classList.toggle('visible');
+  sidebarOverlay.classList.toggle('visible');
+  document.body.style.overflow = sidebar.classList.contains('visible') ? 'hidden' : 'auto';
+});
+
+sidebarOverlay.addEventListener('click', () => {
+  sidebar.classList.remove('visible');
+  sidebarOverlay.classList.remove('visible');
+  document.body.style.overflow = 'auto';
+});
+
+// Close sidebar when clicking outside on mobile
+document.addEventListener('click', (event) => {
+  if (window.innerWidth <= 768) {
+    if (!sidebar.contains(event.target) && !toggleSidebarBtn.contains(event.target)) {
       sidebar.classList.remove('visible');
       sidebarOverlay.classList.remove('visible');
       document.body.style.overflow = 'auto';
-    });
-  
-    searchInput.addEventListener('input', applyFilters);
-    statusFilter.addEventListener('change', applyFilters);
-  
-    qrcodeBtn.addEventListener('click', () => {
-      window.location.href = 'qr-code.html';
-    });
-  
-    downloadBtn.addEventListener('click', generatePDF);
-  
-    logoutBtn.addEventListener('click', () => {
-      localStorage.removeItem('user');
-      window.location.href = 'LogIn.html';
-    });
-  
-    // Close sidebar when clicking outside on mobile
-    document.addEventListener('click', (event) => {
-      if (window.innerWidth <= 768) {
-        if (!sidebar.contains(event.target) && !toggleSidebarBtn.contains(event.target)) {
-          sidebar.classList.remove('visible');
-          sidebarOverlay.classList.remove('visible');
-          document.body.style.overflow = 'auto';
-        }
-      }
-    });
+    }
+  }
+});
   
     // Initialize dashboard
     initDashboard();
