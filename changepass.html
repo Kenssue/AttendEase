@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Password Update | Student Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --secondary: #3f37c9;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
+      --success: #4cc9f0;
+      --error: #f72585;
+      --warning: #ff9e00;
+      --border-radius: 16px;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --glass-bg: rgba(255, 255, 255, 0.95);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+
+    .security-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 500px;
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .security-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(67, 97, 238, 0.1) 0%, transparent 70%);
+      z-index: -1;
+      animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .security-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .security-icon {
+      font-size: 2.8rem;
+      color: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .security-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .security-subtitle {
+      font-size: 0.95rem;
+      color: var(--dark);
+      opacity: 0.8;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: var(--dark);
+      opacity: 0.8;
+    }
+
+    .input-field {
+      position: relative;
+    }
+
+    .input-field input {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3rem;
+      border: 2px solid rgba(67, 97, 238, 0.15);
+      border-radius: var(--border-radius);
+      font-size: 0.95rem;
+      transition: var(--transition);
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .input-field input:focus {
+      outline: none;
+      border-color: rgba(67, 97, 238, 0.4);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    .input-field i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary);
+      opacity: 0.7;
+    }
+
+    .password-container {
+      position: relative;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: var(--primary);
+      opacity: 0.7;
+      z-index: 2;
+      transition: var(--transition);
+    }
+
+    .password-toggle:hover {
+      opacity: 1;
+    }
+
+    .password-requirements {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--dark);
+      opacity: 0.7;
+    }
+
+    .password-strength {
+      margin-top: 0.5rem;
+      height: 6px;
+      background: #e9ecef;
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .strength-meter {
+      height: 100%;
+      width: 0;
+      transition: var(--transition);
+    }
+
+    .strength-label {
+      position: absolute;
+      right: 0;
+      top: -1.5rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(255, 255, 255, 0) 60%
+      );
+      transform: rotate(30deg);
+      transition: var(--transition);
+    }
+
+    .btn:hover::after {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(67, 97, 238, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    #response {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .success {
+      background-color: rgba(76, 201, 240, 0.1);
+      color: var(--success);
+      border: 1px solid rgba(76, 201, 240, 0.3);
+      display: block;
+    }
+
+    .error {
+      background-color: rgba(247, 37, 133, 0.1);
+      color: var(--error);
+      border: 1px solid rgba(247, 37, 133, 0.3);
+      display: block;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 1.5rem;
+      }
+      
+      .security-card {
+        padding: 2rem;
+      }
+      
+      .security-title {
+        font-size: 1.6rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 1rem;
+      }
+      
+      .security-card {
+        padding: 1.5rem;
+      }
+      
+      .security-title {
+        font-size: 1.4rem;
+      }
+      
+      .input-field input {
+        padding: 0.9rem 0.9rem 0.9rem 2.5rem;
+      }
+      
+      .input-field i {
+        left: 0.9rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="security-card">
+    <div class="security-header">
+      <div class="security-icon">
+        <i class="fas fa-user-shield"></i>
+      </div>
+      <h2 class="security-title">Secure Password Update</h2>
+      <p class="security-subtitle">Please verify your identity and set a new secure password</p>
+    </div>
+    
+    <form id="changePasswordForm">
+      <div class="form-group">
+        <label for="student_id">Student ID</label>
+        <div class="input-field">
+          <i class="fas fa-id-card"></i>
+          <input type="text" id="student_id" name="student_id" placeholder="Enter your student ID" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="username">Full Name</label>
+        <div class="input-field">
+          <i class="fas fa-user"></i>
+          <input type="text" id="username" name="username" placeholder="Enter your full name" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <div class="input-field">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="email" name="email" placeholder="Enter your registered email" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="course">Course</label>
+        <div class="input-field">
+          <i class="fas fa-graduation-cap"></i>
+          <input type="text" id="course" name="course" placeholder="Enter your course" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="section">Section</label>
+        <div class="input-field">
+          <i class="fas fa-users"></i>
+          <input type="text" id="section" name="section" placeholder="Enter your section" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="new_password">New Password</label>
+        <div class="input-field password-container">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="new_password" name="new_password" placeholder="Create a strong password" required>
+          <span class="password-toggle" id="togglePassword">
+            <i class="far fa-eye"></i>
+          </span>
+        </div>
+        <div class="password-requirements">
+          Must be at least 8 characters with uppercase, number, and special character
+        </div>
+        <div class="password-strength">
+          <div class="strength-meter" id="strengthMeter"></div>
+          <span class="strength-label" id="strengthLabel">Weak</span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-sync-alt"></i> Update Password
+      </button>
+    </form>
+
+    <p id="response"></p>
+  </div>
+
+  <script>
+    // Security measures
+    DisableDevtool({});
+    document.addEventListener('keydown', e => {
+      if (
+        (e.ctrlKey && e.key.toLowerCase() === 's') ||
+        (e.ctrlKey && e.key.toLowerCase() === 'c') ||
+        (e.ctrlKey && e.key.toLowerCase() === 'v') ||
+        (e.ctrlKey && e.key.toLowerCase() === 'x') ||
+        (e.ctrlKey && e.key.toLowerCase() === 'a') ||
+        (e.ctrlKey && e.key.toLowerCase() === 'p')
+      ) {
+        e.preventDefault();
+      }
+    });
+
+    // DOM Elements
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('new_password');
+    const form = document.getElementById("changePasswordForm");
+    const responseElement = document.getElementById("response");
+    const strengthMeter = document.getElementById("strengthMeter");
+    const strengthLabel = document.getElementById("strengthLabel");
+
+    // Toggle Password Visibility
+    togglePassword.addEventListener('click', function () {
+      const isHidden = passwordInput.getAttribute('type') === 'password';
+      passwordInput.setAttribute('type', isHidden ? 'text' : 'password');
+      togglePassword.innerHTML = isHidden ? '<i class="far fa-eye-slash"></i>' : '<i class="far fa-eye"></i>';
+    });
+
+    // Password Strength Calculator
+    passwordInput.addEventListener('input', function() {
+      const password = this.value;
+      let strength = 0;
+      let label = '';
+      let color = '';
+      
+      // Length check
+      if (password.length >= 8) strength += 25;
+      if (password.length >= 12) strength += 25;
+      
+      // Character variety
+      if (/[A-Z]/.test(password)) strength += 15;
+      if (/[0-9]/.test(password)) strength += 15;
+      if (/[^A-Za-z0-9]/.test(password)) strength += 20;
+      
+      strength = Math.min(strength, 100);
+      
+      // Determine strength level
+      if (strength < 40) {
+        label = 'Weak';
+        color = '#ff4d4d';
+      } else if (strength < 70) {
+        label = 'Moderate';
+        color = '#ffa500';
+      } else {
+        label = 'Strong';
+        color = '#4CAF50';
+      }
+      
+      // Update meter and label
+      strengthMeter.style.width = strength + '%';
+      strengthMeter.style.backgroundColor = color;
+      strengthLabel.textContent = label;
+      strengthLabel.style.color = color;
+    });
+
+    // Form Submission
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      // Validate password strength
+      if (passwordInput.value.length < 8) {
+        responseElement.textContent = "Password must be at least 8 characters long";
+        responseElement.className = "error";
+        responseElement.style.display = "block";
+        return;
+      }
+
+      // Get form data
+      const formData = {
+        action: "changePassword",
+        student_id: document.getElementById("student_id").value,
+        username: document.getElementById("username").value,
+        email: document.getElementById("email").value,
+        course: document.getElementById("course").value,
+        section: document.getElementById("section").value,
+        new_password: passwordInput.value
+      };
+
+      // Clear previous response and show loading state
+      responseElement.textContent = "Securely updating your password...";
+      responseElement.className = "";
+      responseElement.style.display = "block";
+
+      // Disable button during submission
+      const submitBtn = form.querySelector('button');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+      // Submit to Google Apps Script
+      fetch("https://script.google.com/macros/s/AKfycby_DqLMBeITDBIEh-Yre58wRcxYqz93QjLwiCfmgwqcfK05fPVZwuABDvwCZwRbhLU-/exec ", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams(formData)
+      })
+      .then(response => response.text())
+      .then(data => {
+        if (data === "Password updated successfully.") {
+          responseElement.textContent = "Password updated successfully! Redirecting to login...";
+          responseElement.className = "success";
+          setTimeout(() => {
+            window.location.href = "LogIn.html";
+          }, 2000);
+        } else {
+          responseElement.textContent = data;
+          responseElement.className = "error";
+        }
+      })
+      .catch(error => {
+        responseElement.textContent = "Network error. Please try again.";
+        responseElement.className = "error";
+        console.error("Error:", error);
+      })
+      .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Update Password';
+      });
+    });
+  </script>
+</body>
+</html>
