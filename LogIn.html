@@ -500,7 +500,7 @@
         <div class="form-group">
           <div class="input-field">
             <i class="fas fa-id-card"></i>
-            <input type="text" name="student_id" placeholder="Student ID" required>
+            <input type="text" name="studentId" placeholder="Student ID" required>
           </div>
         </div>
         
@@ -565,48 +565,57 @@
     }
 
     // Form submissions
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwcWqROMQ9pYqDd8wwY4R4tln1QTMSsPJ8NdGJIeet-sBioVbu8BURTSMPEivjEUQMc/exec ';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzIiMtszdwXhVlh1LRyquV-pusjujcc_KTAnlu3h819KofHfnvCGSvbytfUh8cornVi/exec';
 
     // Register form
     document.getElementById('registerForm').addEventListener('submit', e => {
-      e.preventDefault();
-      const form = e.target;
-      const formData = new FormData(form);
-      const messageElement = document.getElementById('message');
-      
-      formData.append('action', 'register');
-      messageElement.textContent = "Creating account...";
-      messageElement.className = "message";
-      messageElement.style.display = "block";
+  e.preventDefault();
+  const form = e.target;
+  const formData = new FormData(form);
+  const messageElement = document.getElementById('message');
 
-      // Disable button during submission
-      const submitBtn = form.querySelector('button');
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+  formData.append('action', 'register');
+  messageElement.textContent = "Creating account...";
+  messageElement.className = "message";
+  messageElement.style.display = "block";
 
-      fetch(scriptURL, { method: 'POST', body: formData })
-        .then(res => res.text())
-        .then(msg => {
-          if (msg === 'Student account already registered') {
-            messageElement.textContent = "Student ID is already registered.";
-            messageElement.className = "message error";
-          } else {
-            messageElement.textContent = "Account created successfully! Redirecting...";
-            messageElement.className = "message success";
-            setTimeout(() => {
-              window.location.href = 'LogIn.html';
-            }, 1500);
-          }
-        })
-        .catch(error => {
-          messageElement.textContent = "An error occurred. Please try again.";
-          messageElement.className = "message error";
-        })
-        .finally(() => {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Register';
-        });
+  const submitBtn = form.querySelector('button');
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+  fetch(scriptURL, { method: 'POST', body: formData })
+    .then(res => res.text())
+    .then(msg => {
+      if (msg === 'Student ID is already registered.') {
+        messageElement.textContent = "This Student ID is already registered.";
+        messageElement.className = "message error";
+      } else if (msg === 'Name is already taken.') {
+        messageElement.textContent = "This name is already taken.";
+        messageElement.className = "message error";
+      } else if (msg === 'Email is already registered.') {
+        messageElement.textContent = "This email is already registered.";
+        messageElement.className = "message error";
+      } else if (msg === 'Registered successfully.') {
+        messageElement.textContent = "Account created successfully! Redirecting...";
+        messageElement.className = "message success";
+        setTimeout(() => {
+          window.location.href = 'LogIn.html';
+        }, 1500);
+      } else {
+        messageElement.textContent = "Unexpected response: " + msg;
+        messageElement.className = "message error";
+      }
+    })
+    .catch(error => {
+      messageElement.textContent = "An error occurred. Please try again.";
+      messageElement.className = "message error";
+    })
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Register';
     });
+});
+
 
     // Login form
     document.getElementById('loginForm').addEventListener('submit', e => {
