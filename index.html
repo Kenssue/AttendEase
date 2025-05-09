@@ -6,190 +6,427 @@
   <meta name="description" content="ICCT QR Code-Based Attendance System for Students and Professors. Learn how to register, scan, and track attendance.">
   <meta name="keywords" content="ICCT, QR Code, Attendance System, Student Portal, Professor Portal">
   <meta name="author" content="ICCT Colleges">
-  <title>AttendEase</title>
-  <script src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
-<script>
-    DisableDevtool({
-    });
-    document.addEventListener('keydown', e => {
-      if (
-        (e.ctrlKey && e.key.toLowerCase() === 's') ||
-        (e.ctrlKey && e.key.toLowerCase() === 'c') || 
-        (e.ctrlKey && e.key.toLowerCase() === 'v') || 
-        (e.ctrlKey && e.key.toLowerCase() === 'x') || 
-        (e.ctrlKey && e.key.toLowerCase() === 'a') ||
-        (e.ctrlKey && e.key.toLowerCase() === 'p')   
-      ) {
-        e.preventDefault();
-      }
-    });
-</script>
+  <title>AttendEase | ICCT Attendance System</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --primary: #6a11cb;
+      --primary-light: #7d3cff;
+      --secondary: #2575fc;
+      --accent: #00d2ff;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
+      --glass-bg: rgba(26, 26, 46, 0.8);
+      --glass-border: 1px solid rgba(255, 255, 255, 0.15);
+      --border-radius: 16px;
+      --box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
+
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: url('ICCT.jpg') no-repeat center center fixed;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('ICCT.jpg') no-repeat center center fixed;
       background-size: cover;
+      color: var(--light);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      color: #fff;
-      text-align: center;
-      overflow: auto;
-    }
-    .container {
-    display: flex;
-    flex-direction: column;
-    max-width: 900px;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    overflow: hidden;
-    /* Remove or adjust this line */
-    /* max-height: 95vh; */
-    height: auto; /* Allow the container to grow with content */
-    animation: fadeIn 1s ease-out;
-  }
-    .header {
       padding: 2rem;
-      background: rgba(255, 255, 255, 0.1);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      line-height: 1.6;
     }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+      animation: fadeIn 0.8s ease-out;
+      border: var(--glass-border);
+    }
+
+    .header {
+      padding: 2.5rem;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(106, 17, 203, 0.3), rgba(37, 117, 252, 0.3));
+      border-bottom: var(--glass-border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      z-index: -1;
+    }
+
     .header h1 {
       font-size: 2.5rem;
       margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, var(--primary-light), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
     }
+
     .header p {
       font-size: 1.2rem;
-      margin-top: 0.5rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
     }
+
     .content {
       display: flex;
-      flex-direction: row;
       flex-wrap: wrap;
-      justify-content: space-between;
+      padding: 0;
+    }
+
+    .left, .right {
       padding: 2rem;
     }
+
+    .left {
+      flex: 1;
+      min-width: 300px;
+      border-right: var(--glass-border);
+    }
+
+    .left h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: var(--accent);
+      position: relative;
+      display: inline-block;
+    }
+
+    .left h2::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 3px;
+    }
+
+    .guide-item {
+      margin-bottom: 2rem;
+      padding-left: 1.5rem;
+      border-left: 3px solid rgba(37, 117, 252, 0.5);
+      transition: var(--transition);
+    }
+
+    .guide-item:hover {
+      border-left-color: var(--accent);
+      transform: translateX(5px);
+    }
+
+    .guide-item strong {
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+
+    .guide-item p {
+      font-size: 1rem;
+      line-height: 1.7;
+      opacity: 0.9;
+    }
+
+    .action-container {
+      margin-top: 3rem;
+      padding: 1.5rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: var(--border-radius);
+      border: var(--glass-border);
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .checkbox-container input {
+      margin-right: 1rem;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+    }
+
+    .checkbox-container label {
+      font-size: 0.95rem;
+      opacity: 0.9;
+      cursor: pointer;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+      border-radius: var(--border-radius);
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      transition: var(--transition);
+      box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(255, 255, 255, 0) 60%
+      );
+      transform: rotate(30deg);
+      transition: var(--transition);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(106, 17, 203, 0.6);
+    }
+
+    .btn:hover::after {
+      left: 100%;
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+      background: linear-gradient(135deg, #555, #777);
+    }
+
+    footer {
+      padding: 1.5rem;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.3);
+      border-top: var(--glass-border);
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+    .header {
+      padding: 2rem;
+    }
+    
+    .header h1 {
+      font-size: 2.2rem;
+    }
+    
+    .left, .right {
+      padding: 1.5rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      max-width: 90%;
+    }
+    
+    .left {
+      border-right: none;
+      border-bottom: var(--glass-border);
+    }
+    
+    .header h1 {
+      font-size: 2rem;
+    }
+    
+    .header p {
+      font-size: 1.1rem;
+    }
+    
+    .left h2 {
+      font-size: 1.6rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    body {
+      padding: 1rem;
+      flex-direction: column;
+    }
+    
+    .container {
+      max-width: 100%;
+      margin: 0;
+    }
+    
+    .header {
+      padding: 1.5rem;
+    }
+    
+    .header h1 {
+      font-size: 1.8rem;
+    }
+    
     .left, .right {
       padding: 1rem;
     }
-    .left {
-      flex: 1;
-      border-right: 1px solid rgba(255, 255, 255, 0.2);
-      text-align: left;
-      max-height: 70vh;
-      overflow-y: auto;
-    }
+    
     .left h2 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
+      font-size: 1.4rem;
     }
-    .left p {
+    
+    .guide-item strong {
       font-size: 1rem;
-      line-height: 1.8;
-      margin-bottom: 1.5rem;
     }
-    .right {
-      flex: 0.3;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
+    
+    .btn {
+      padding: 0.9rem 1.5rem;
+      font-size: 1rem;
     }
+
     .action-container {
-      text-align: center;
-      margin: 2rem 0;
-    }
-    .checkbox-container {
-      margin-bottom: 1rem;
-    }
-    .action-container a {
-      display: inline-block;
-      padding: 1rem 2rem;
-      font-size: 1.2rem;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
-      transition: background 0.3s ease, transform 0.3s ease;
-    }
-    .action-container a.disabled {
-      pointer-events: none;
-      opacity: 0.5;
-    }
-    .action-container a:hover {
-      background: linear-gradient(135deg, #2575fc, #6a11cb);
-      transform: scale(1.1);
-    }
-    footer {
       padding: 1rem;
-      background: rgba(255, 255, 255, 0.1);
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      font-size: 0.9rem;
-      text-align: center;
     }
+
+    footer {
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .header h1 {
+      font-size: 1.6rem;
+    }
+    
+    .header p {
+      font-size: 1rem;
+    }
+    
+    .btn {
+      padding: 0.8rem 1.2rem;
+      font-size: 0.9rem;
+    }
+  }
   </style>
 </head>
 <body>
   <div class="container">
     <header class="header">
-      <h1>Welcome to the AttendEase</h1>
-      <p>Your guide to seamless attendance tracking and management.</p>
+      <h1>Welcome to AttendEase</h1>
+      <p>Your seamless solution for QR Code-based attendance tracking and management.</p>
     </header>
+    
     <main class="content">
       <section class="left">
         <h2>How to Use This Platform</h2>
-        <p><strong>🔐 1. Registration Process</strong><br>
-        Go to the Registration Page (URL provided by your professor).<br>
-        Fill in the required fields (Full Name, Student ID, Password, Course, Section).<br>
-        Click Register and wait for confirmation.</p>
-    
-        <p><strong>🎟️ 2. Getting Your QR Code</strong><br>
-        After logging in, your QR Code will automatically generate. Save or print it and bring it to every class.</p>
-    
-        <p><strong>🏫 3. Scanning Attendance in Class</strong><br>
-        Locate the QR Code Scanner in your classroom, present your QR code, and wait for the buzzer to confirm a successful scan.</p>
-    
-        <p><strong>🚫 4. Rules and Guidelines</strong><br>
-        Do not share your QR code. Scan only during the allowed attendance window. Report issues to the professor or admin.</p>
-    
-        <p><strong>📋 5. Verifying Your Attendance</strong><br>
-        Check your attendance through the Student Dashboard after logging in.</p>
-    
-        <p><strong>🛠️ 6. Troubleshooting</strong><br>
-        <strong>No buzzer sound:</strong> Ensure the QR code is clear and steady.<br>
-        <strong>Scan rejected:</strong> Verify your section is registered.<br>
-        <strong>Attendance not showing:</strong> Refresh the dashboard or contact the admin.<br>
-        <strong>Login issues:</strong> Reset credentials if necessary.</p>
-    
-        <p><strong>📞 7. Support</strong><br>
-        For issues, contact:<br>
-        <strong>Admin Email:</strong> admin@icct.edu.ph<br>
-        <strong>Office Hours:</strong> Monday to Friday, 9AM–5PM</p>
-    
-        <!-- Moved the action-container here -->
+        
+        <div class="guide-item">
+          <strong><i class="fas fa-user-plus"></i> 1. Registration Process</strong>
+          <p>Go to the Registration Page (URL provided by your professor). Fill in the required fields (Full Name, Student ID, Password, Course, Section). Click Register and wait for confirmation.</p>
+        </div>
+        
+        <div class="guide-item">
+          <strong><i class="fas fa-qrcode"></i> 2. Getting Your QR Code</strong>
+          <p>After logging in, your QR Code will automatically generate. Save or print it and bring it to every class.</p>
+        </div>
+        
+        <div class="guide-item">
+          <strong><i class="fas fa-user-check"></i> 3. Scanning Attendance in Class</strong>
+          <p>Locate the QR Code Scanner in your classroom, present your QR code, and wait for the confirmation to ensure a successful scan.</p>
+        </div>
+        
+        <div class="guide-item">
+          <strong><i class="fas fa-exclamation-circle"></i> 4. Rules and Guidelines</strong>
+          <p>Do not share your QR code. Scan only during the allowed attendance window. Report issues to the professor or admin immediately.</p>
+        </div>
+        
+        <div class="guide-item">
+          <strong><i class="fas fa-clipboard-check"></i> 5. Verifying Your Attendance</strong>
+          <p>Check your attendance records through the Student Dashboard after logging in to ensure all sessions are properly recorded.</p>
+        </div>
+        
+        <div class="guide-item">
+          <strong><i class="fas fa-tools"></i> 6. Troubleshooting</strong>
+          <p>
+            <strong>No confirmation:</strong> Ensure the QR code is clear and steady.<br>
+            <strong>Scan rejected:</strong> Verify your section is registered.<br>
+            <strong>Attendance not showing:</strong> Refresh the dashboard or contact the admin.<br>
+            <strong>Login issues:</strong> Reset credentials if necessary.
+          </p>
+        </div>
+        
+        <div class="guide-item">
+          <strong><i class="fas fa-headset"></i> 7. Support</strong>
+          <p>
+            For technical issues, contact:<br>
+            <strong>Admin Email:</strong> admin@icct.edu.ph<br>
+            <strong>Office Hours:</strong> Monday to Friday, 9AM–5PM
+          </p>
+        </div>
+        
         <div class="action-container">
           <div class="checkbox-container">
             <input type="checkbox" id="termsCheckbox" />
-            <label for="termsCheckbox">I have read and understood the instructions above.</label>
+            <label for="termsCheckbox">I have read and understood all the instructions above</label>
           </div>
-          <a href="LogIn.html" role="button" aria-label="Log in or register" id="proceedButton" class="disabled" onclick="return validateCheckbox()">Log In / Register</a>
+          <a href="LogIn.html" class="btn disabled" id="proceedButton">
+            <i class="fas fa-sign-in-alt"></i> Log In / Register
+          </a>
         </div>
       </section>
     </main>
+    
     <footer>
-      &copy; 2025 Attendance Platform. All rights reserved.
+      &copy; 2025 ICCT Colleges - AttendEase System. All rights reserved.
     </footer>
   </div>
+
   <script>
     const checkbox = document.getElementById('termsCheckbox');
     const proceedButton = document.getElementById('proceedButton');
@@ -197,17 +434,29 @@
     checkbox.addEventListener('change', () => {
       if (checkbox.checked) {
         proceedButton.classList.remove('disabled');
-        proceedButton.removeAttribute('onclick');
       } else {
         proceedButton.classList.add('disabled');
-        proceedButton.setAttribute('onclick', 'return validateCheckbox()');
       }
     });
 
-    function validateCheckbox() {
-      alert('Please check the box to proceed.');
-      return false;
-    }
+    // Add animation to guide items on scroll
+    const guideItems = document.querySelectorAll('.guide-item');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateX(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    guideItems.forEach((item, index) => {
+      item.style.opacity = '0';
+      item.style.transform = 'translateX(-20px)';
+      item.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+      observer.observe(item);
+    });
   </script>
 </body>
 </html>
