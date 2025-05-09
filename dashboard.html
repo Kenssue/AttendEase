@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Student Dashboard | AttendEase</title>
+  <title> Dashboard | AttendEase</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.22/jspdf.plugin.autotable.min.js"></script>
@@ -255,7 +255,7 @@
     }
 
     .toggle-sidebar {
-      display: flex;
+      display: none; /* Hidden by default */
       align-items: center;
       justify-content: center;
       position: fixed;
@@ -416,7 +416,7 @@
         padding: 1rem;
       }
       .toggle-sidebar {
-        display: block;
+        display: flex; /* Show toggle button on mobile */
       }
       .header {
         margin-top: 2.5rem;
@@ -677,7 +677,7 @@
     const dateDisplay = document.getElementById('dateDisplay');
   
     // Global variables
-    const scriptURL = 'https://script.google.com/macros/s/AKfycby_DqLMBeITDBIEh-Yre58wRcxYqz93QjLwiCfmgwqcfK05fPVZwuABDvwCZwRbhLU-/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwcWqROMQ9pYqDd8wwY4R4tln1QTMSsPJ8NdGJIeet-sBioVbu8BURTSMPEivjEUQMc/exec ';
     const user = JSON.parse(localStorage.getItem('user'));
     let classmatesData = [];
   
@@ -704,6 +704,11 @@
       });
       dateDisplay.textContent = formattedDate;
       attendanceTitle.textContent = `Attendance for ${user.section}`;
+  
+      // Check screen size and set initial sidebar state
+      if (window.innerWidth <= 768) {
+        sidebar.classList.add('hidden');
+      }
   
       // Fetch classmates data
       fetchClassmates();
@@ -904,6 +909,21 @@
           sidebar.classList.remove('visible');
           sidebarOverlay.classList.remove('visible');
           document.body.style.overflow = 'auto';
+        }
+      }
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        // On larger screens, ensure sidebar is visible
+        sidebar.classList.remove('visible', 'hidden');
+        sidebarOverlay.classList.remove('visible');
+        document.body.style.overflow = 'auto';
+      } else {
+        // On smaller screens, hide sidebar if not already visible
+        if (!sidebar.classList.contains('visible')) {
+          sidebar.classList.add('hidden');
         }
       }
     });
