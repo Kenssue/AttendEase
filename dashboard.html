@@ -1,563 +1,916 @@
-<!DOCTYPE html>  
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title> Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Student Dashboard | AttendEase</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.22/jspdf.plugin.autotable.min.js"></script>
-  <script src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
-<script>
-    DisableDevtool({
-    });
-    document.addEventListener('keydown', e => {
-      if (
-        (e.ctrlKey && e.key.toLowerCase() === 's') || // Save
-        (e.ctrlKey && e.key.toLowerCase() === 'c') || // Copy
-        (e.ctrlKey && e.key.toLowerCase() === 'v') || // Paste
-        (e.ctrlKey && e.key.toLowerCase() === 'x') || // Cut
-        (e.ctrlKey && e.key.toLowerCase() === 'a') || // Select All
-        (e.ctrlKey && e.key.toLowerCase() === 'p')    // Print
-      ) {
-        e.preventDefault();
-      }
-    });
-</script>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    :root {
+  --primary: #4361ee;
+  --primary-dark: #3a56d4;
+  --secondary: #3f37c9;
+  --accent: #4cc9f0;
+  --success: #4cc9f0;
+  --error: #f72585;
+  --dark: #1a1a2e;
+  --light: #f8f9fa;
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.15);
+  --border-radius: 12px;
+  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      height: 100vh;
-      background: linear-gradient(to right, #f4f4f9, #e8eaf6);
-      color: #333;
-      overflow-x: hidden;
-      transition: transform 0.3s ease;
-    }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    .left-section {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100vh;
-      width: 25%;
-      background: #ffffff;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-      border-right: 1px solid #ddd;
-      transform: translateX(0); 
-      transition: transform 0.3s ease;
-      z-index: 999;
-    }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  color: var(--dark);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
 
-    .left-section.hide {
-      transform: translateX(-100%);
-    }
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
 
-    .user-info {
-      width: 100%;
-      max-width: 300px;
-      text-align: center;
-    }
+/* Sidebar Styles */
+.sidebar {
+  width: 300px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-right: var(--glass-border);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+  box-shadow: var(--box-shadow);
+  z-index: 1000;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+}
 
-    .user-info h3 {
-      margin-bottom: 20px;
-      font-size: 1.5rem;
-      color: #007bff;
-    }
+.sidebar.hidden {
+  transform: translateX(-100%);
+}
 
-    .user-info label {
-      display: block;
-      margin: 10px 0 5px;
-      font-size: 0.9rem;
-      color: #555;
-      font-weight: bold;
-    }
+.sidebar-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
 
-    .user-info input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 1rem;
-      margin-bottom: 15px;
-      background: #f9f9f9;
-    }
+.sidebar-header h2 {
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-    .nav-btn, .logout-btn, .download-btn {
-      width: 100%;
-      max-width: 300px;
-      padding: 12px;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-top: 10px;
-      border: none;
-      border-radius: 5px;
-      transition: background 0.3s ease, transform 0.2s ease;
-    }
+.user-info {
+  margin-bottom: 1.5rem;
+}
 
-    .nav-btn { background: #007bff; color: #fff; }
-    .nav-btn:hover { background: #0056b3; transform: scale(1.05); }
+.info-group {
+  margin-bottom: 1rem;
+}
 
-    .logout-btn { background: #e53935; color: #fff; }
-    .logout-btn:hover { background: #d32f2f; transform: scale(1.05); }
+.info-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--dark);
+  opacity: 0.8;
+  margin-bottom: 0.3rem;
+}
 
-    .download-btn { background: #4caf50; color: #fff; }
-    .download-btn:hover { background: #388e3c; transform: scale(1.05); }
+.info-group .info-value {
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(67, 97, 238, 0.2);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  color: var(--dark);
+}
 
-    .right-section {
-      width: 100%;
-      padding: 20px;
-      overflow-y: auto;
-      background: #ffffff;
-      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
-      position: relative;
-      flex: 1;
-      transition: transform 0.3s ease, margin-left 0.3s ease;
-      transform: scale(0.9); 
-      margin-left: 25%; 
-    }
+.sidebar-btn {
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: var(--border-radius);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
 
-    .right-section.fullscreen {
-      transform: scale(1); 
-      margin-left: 0; 
-    }
+.sidebar-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  transform: rotate(30deg);
+  transition: var(--transition);
+}
 
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 1.8rem;
-      color: #333;
-    }
+.sidebar-btn:hover::after {
+  left: 100%;
+}
 
-    .controls {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+}
 
-    .controls input, .controls select {
-      padding: 10px;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      background: #f9f9f9;
-      transition: border-color 0.3s ease;
-    }
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(67, 97, 238, 0.4);
+}
 
-    .controls input:focus, .controls select:focus {
-      border-color: #007bff;
-      outline: none;
-    }
+.btn-danger {
+  background: linear-gradient(135deg, #f72585, #b5179e);
+  color: white;
+  box-shadow: 0 4px 15px rgba(247, 37, 133, 0.3);
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      background: #f9f9f9;
-      border-radius: 5px;
-      overflow: hidden;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+.btn-danger:hover {
+  background: linear-gradient(135deg, #d31679, #9e1588);
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(247, 37, 133, 0.4);
+}
 
-    th, td {
-      padding: 15px;
-      border: 1px solid #ddd;
-      text-align: left;
-      font-size: 0.95rem;
-    }
+.btn-success {
+  background: linear-gradient(135deg, #4cc9f0, #3a86ff);
+  color: white;
+  box-shadow: 0 4px 15px rgba(76, 201, 240, 0.3);
+}
 
-    th {
-      background-color: #007bff;
-      color: #fff;
-      font-weight: bold;
-    }
+.btn-success:hover {
+  background: linear-gradient(135deg, #3ab5d9, #2a75e6);
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(76, 201, 240, 0.4);
+}
 
-    tr:nth-child(even) { background-color: #f2f2f2; }
-    tr:hover { background-color: #e8f0fe; }
-    tr.no-data td {
-      text-align: center;
-      color: #999;
-      font-style: italic;
-    }
+/* Main Content Styles */
+.main-content {
+  flex: 1;
+  padding: 1.5rem;
+  margin-left: 300px;
+  transition: var(--transition);
+  width: calc(100% - 300px);
+}
 
-    #studentCount {
-      margin-top: 20px;
-      text-align: center;
-      color: #555;
-      font-size: 1rem;
-      font-weight: bold;
-    }
+.main-content.full-width {
+  margin-left: 0;
+  width: 100%;
+}
 
-    .burger {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      cursor: pointer;
-      z-index: 1001;
-    }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
 
-    .burger span {
-      display: block;
-      width: 25px;
-      height: 3px;
-      background: #333;
-      border-radius: 2px;
-      transition: all 0.3s ease;
-    }
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--dark);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-    .burger.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
+.date-display {
+  font-size: 0.9rem;
+  color: var(--dark);
+  opacity: 0.8;
+}
 
-    .burger.active span:nth-child(2) {
-      opacity: 0;
-    }
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
 
-    .burger.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(5px, -5px);
-    }
+.search-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.7rem 1rem 0.7rem 2.3rem;
+  border: 1px solid rgba(67, 97, 238, 0.2);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.7);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%234361ee' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0.8rem center;
+  background-size: 0.9rem;
+}
 
-    body.no-scroll {
-      overflow: hidden;
-    }
-    @media (max-width: 1024px) {
-    .left-section {
-      width: 70%;
-    }
+.filter-select {
+  padding: 0.7rem 0.8rem;
+  border: 1px solid rgba(67, 97, 238, 0.2);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.7);
+  min-width: 120px;
+}
 
-    .right-section {
-      margin-left: 70%;
-      transform: scale(0.95); 
-      padding: 15px; 
-    }
+.toggle-sidebar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: .5rem;
+  left: .5rem;
+  z-index: 1100;
+  width: 3.2rem;
+  height: 3.2rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  color: var(--primary, #333);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
 
-    .right-section.fullscreen {
-      margin-left: 0;
-      transform: scale(1); 
-    }
+.toggle-sidebar:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.08);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+}
 
-    table th, table td {
-      font-size: 0.85rem; 
-      padding: 10px; 
-    }
+
+/* Table Styles */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 0.8rem;
+}
+
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.8rem;
+  table-layout: fixed;
+}
+
+.attendance-table th {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 0.8rem;
+  text-align: left;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  font-size: 0.85rem;
+}
+
+.attendance-table td {
+  padding: 0.8rem;
+  border-bottom: 1px solid rgba(67, 97, 238, 0.1);
+  font-size: 0.85rem;
+  word-wrap: break-word;
+}
+
+.attendance-table tr:last-child td {
+  border-bottom: none;
+}
+
+.attendance-table tr:hover {
+  background: rgba(67, 97, 238, 0.05);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-present {
+  background: rgba(76, 201, 240, 0.1);
+  color: var(--success);
+  border: 1px solid rgba(76, 201, 240, 0.3);
+}
+
+.status-absent {
+  background: rgba(247, 37, 133, 0.1);
+  color: var(--error);
+  border: 1px solid rgba(247, 37, 133, 0.3);
+}
+
+.student-count {
+  margin-top: 0.8rem;
+  text-align: right;
+  font-size: 0.8rem;
+  color: var(--dark);
+  opacity: 0.8;
+}
+
+/* Overlay for mobile sidebar */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition);
+}
+
+.sidebar-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 280px;
   }
-
-  @media (max-width: 768px) {
-    .left-section {
-      width: 100%;
-    }
-
-    .right-section {
-      margin-left: 100%;
-      transform: scale(0.9); 
-      padding: 10px; 
-    }
-
-    .right-section.fullscreen {
-      margin-left: 0;
-      transform: scale(1); 
-    }
-
-    table th, table td {
-      font-size: 0.8rem; 
-      padding: 8px; 
-    }
+  .main-content {
+    margin-left: 280px;
+    width: calc(100% - 280px);
   }
+}
 
-  @media (max-width: 480px) {
-    .left-section {
-      width: 100%;
-    }
-
-    .right-section {
-      margin-left: 100%;
-      transform: scale(0.85); 
-      padding: 5px; 
-    }
-
-    .right-section.fullscreen {
-      margin-left: 0;
-      transform: scale(1);
-    }
-
-    table th, table td {
-      font-size: 0.75rem; 
-      padding: 5px; 
-    }
-
-    h2 {
-      font-size: 1.5rem; 
-    }
-
-    .controls input, .controls select {
-      font-size: 0.9rem; 
-      padding: 8px; 
-    }
+@media (max-width: 992px) {
+  .sidebar {
+    width: 260px;
+    padding: 1.2rem;
   }
+  .main-content {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    padding: 1.2rem;
+  }
+  .sidebar-btn {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    width: 280px;
+  }
+  .sidebar.visible {
+    transform: translateX(0);
+  }
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 1rem;
+  }
+  .toggle-sidebar {
+    display: block;
+  }
+  .header {
+    margin-top: 2.5rem;
+  }
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .search-input,
+  .filter-select {
+    width: 100%;
+  }
+  .attendance-table th,
+  .attendance-table td {
+    padding: 0.6rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .sidebar {
+    width: 260px;
+  }
+  .page-title {
+    font-size: 1.3rem;
+  }
+  .date-display {
+    font-size: 0.8rem;
+  }
+  .search-input {
+    min-width: 100%;
+  }
+  .attendance-table th,
+  .attendance-table td {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+  .status-badge {
+    font-size: 0.7rem;
+  }
+  .student-count {
+    font-size: 0.75rem;
+  }
+}
+
+/* Extra small devices (phones, 360px and down) */
+@media (max-width: 360px) {
+  body {
+    font-size: 14px;
+  }
+  .main-content {
+    padding: 0.8rem;
+  }
+  .sidebar {
+    width: 100%;
+    max-width: 300px;
+  }
+  .sidebar-header h2 {
+    font-size: 1.3rem;
+  }
+  .info-group label {
+    font-size: 0.8rem;
+  }
+  .info-group .info-value {
+    font-size: 0.85rem;
+    padding: 0.6rem;
+  }
+  .sidebar-btn {
+    padding: 0.7rem;
+    font-size: 0.85rem;
+  }
+  .page-title {
+    font-size: 1.2rem;
+  }
+  .table-container {
+    padding: 0.5rem;
+  }
+  .attendance-table {
+    display: block;
+    width: 100%;
+  }
+  .attendance-table thead,
+  .attendance-table tbody,
+  .attendance-table tr,
+  .attendance-table th,
+  .attendance-table td {
+    display: block;
+  }
+  .attendance-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  .attendance-table tr {
+    margin-bottom: 0.8rem;
+    border: 1px solid rgba(67, 97, 238, 0.1);
+    border-radius: var(--border-radius);
+  }
+  .attendance-table td {
+    padding: 0.5rem;
+    border: none;
+    border-bottom: 1px solid rgba(67, 97, 238, 0.05);
+    position: relative;
+    padding-left: 40%;
+  }
+  .attendance-table td:before {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    width: 35%;
+    padding-right: 0.5rem;
+    white-space: nowrap;
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--primary);
+  }
+  .attendance-table td:last-child {
+    border-bottom: none;
+  }
+  .status-badge {
+    font-size: 0.65rem;
+  }
+  .student-count {
+    font-size: 0.75rem;
+  }
+}
+
+/* Very small devices (phones, 320px and down) */
+@media (max-width: 320px) {
+  .main-content {
+    padding: 0.6rem;
+  }
+  .sidebar {
+    padding: 1rem;
+  }
+  .sidebar-btn {
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+  .info-group .info-value {
+    padding: 0.5rem;
+  }
+  .attendance-table td {
+    padding-left: 45%;
+    font-size: 0.75rem;
+  }
+  .attendance-table td:before {
+    font-size: 0.7rem;
+  }
+}
   </style>
 </head>
 <body>
+  <div class="dashboard-container">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h2>Dashboard</h2>
+      </div>
+      
+      <div class="user-info">
+        <div class="info-group">
+          <label>Student Name</label>
+          <div class="info-value" id="fullName"></div>
+        </div>
+        
+        <div class="info-group">
+          <label>Student ID</label>
+          <div class="info-value" id="studentId"></div>
+        </div>
+        
+        <div class="info-group">
+          <label>Course</label>
+          <div class="info-value" id="course"></div>
+        </div>
+        
+        <div class="info-group">
+          <label>Section</label>
+          <div class="info-value" id="section"></div>
+        </div>
+      </div>
+      
+      <button class="sidebar-btn btn-primary" id="qrcodeBtn">
+        <i class="fas fa-qrcode"></i> My QR Code
+      </button>
+      
+      <button class="sidebar-btn btn-success" id="downloadBtn">
+        <i class="fas fa-file-pdf"></i> Download PDF
+      </button>
+      
+      <button class="sidebar-btn btn-danger" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </aside>
 
-  
-  <div class="burger" id="burgerBtn">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
-
-
-  <div class="left-section" id="sidebar">
-    <div class="user-info">
-      <h3>Student Information</h3>
-      <label for="fullName">Student Name</label>
-      <input type="text" id="fullName" readonly>
-      <label for="studentId">Student ID</label>
-      <input type="text" id="studentId" readonly>
-      <label for="course">Course</label>
-      <input type="text" id="course" readonly>
-      <label for="section">Section</label>
-      <input type="text" id="section" readonly>
-      <button class="nav-btn" id="qrcodeBtn">Go to QR Code</button>
-      <button class="logout-btn" id="logoutBtn">Logout</button>
-      <button class="download-btn" id="downloadBtn">Download as PDF</button>
-    </div>
-  </div>
-
-  <div class="right-section" id="mainContent">
-    <h2 id="attendanceTitle">Attendance of</h2>
-    <div class="controls">
-      <input type="text" id="searchInput" placeholder="Search by name or ID...">
-      <select id="statusFilter">
-        <option value="all">All</option>
-        <option value="present">Present</option>
-        <option value="absent">Absent</option>
-      </select>
-    </div>
-
-    <table id="classmateTable">
-      <thead>
-        <tr>
-          <th>Student Name</th>
-          <th>Student ID</th>
-          <th>Course</th>
-          <th>Section</th>
-          <th>Status</th>
-          <th>Timestamp</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-    <div id="studentCount">Showing 0 students</div>
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+      <button class="toggle-sidebar" id="toggleSidebar">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <div class="header">
+        <div>
+          <h1 class="page-title" id="attendanceTitle">Attendance</h1>
+          <p class="date-display" id="dateDisplay"></p>
+        </div>
+      </div>
+      
+      <div class="controls">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search students...">
+        <select class="filter-select" id="statusFilter">
+          <option value="all">All Status</option>
+          <option value="present">Present</option>
+          <option value="absent">Absent</option>
+        </select>
+      </div>
+      
+      <div class="table-container">
+        <table class="attendance-table" id="classmateTable">
+          <thead>
+            <tr>
+              <th>Student Name</th>
+              <th>Student ID</th>
+              <th>Course</th>
+              <th>Section</th>
+              <th>Status</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        
+        <div class="student-count" id="studentCount">Showing 0 students</div>
+      </div>
+    </main>
   </div>
 
   <script>
-    const burgerBtn = document.getElementById('burgerBtn');
+    // DOM Elements
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('mainContent');
-    const body = document.body;
-
-    
-    burgerBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('hide');
-      burgerBtn.classList.toggle('active');
-      mainContent.classList.toggle('fullscreen');
-      body.classList.toggle('no-scroll'); 
-    });
-
-    document.addEventListener('click', (event) => {
-      if (!sidebar.contains(event.target) && !burgerBtn.contains(event.target)) {
-        sidebar.classList.add('hide');
-        burgerBtn.classList.remove('active');
-        mainContent.classList.add('fullscreen');
-        body.classList.remove('no-scroll');
-      }
-    });
-
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbx8HacEt687VPeg5EpAT39n4gEdt3vhs8QXVBhH1ChVpJFtYgiN_WDKIKqH2YMlp3D6/exec';
+    const toggleSidebarBtn = document.getElementById('toggleSidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const classmateTable = document.querySelector('#classmateTable tbody');
+    const studentCount = document.getElementById('studentCount');
+    const qrcodeBtn = document.getElementById('qrcodeBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const fullNameEl = document.getElementById('fullName');
+    const studentIdEl = document.getElementById('studentId');
+    const courseEl = document.getElementById('course');
+    const sectionEl = document.getElementById('section');
+    const attendanceTitle = document.getElementById('attendanceTitle');
+    const dateDisplay = document.getElementById('dateDisplay');
+  
+    // Global variables
+    const scriptURL = 'https://script.google.com/macros/s/AKfycby_DqLMBeITDBIEh-Yre58wRcxYqz93QjLwiCfmgwqcfK05fPVZwuABDvwCZwRbhLU-/exec';
     const user = JSON.parse(localStorage.getItem('user'));
     let classmatesData = [];
-
-    if (!user) {
-      window.location.href = 'LogIn.html';
-    } else {
-      document.getElementById('fullName').value = user.username;
-      document.getElementById('studentId').value = user.student_id;
-      document.getElementById('course').value = user.course;
-      document.getElementById('section').value = user.section;
-
-      
+  
+    // Initialize dashboard
+    function initDashboard() {
+      if (!user) {
+        window.location.href = 'LogIn.html';
+        return;
+      }
+  
+      // Set user info
+      fullNameEl.textContent = user.username;
+      studentIdEl.textContent = user.student_id;
+      courseEl.textContent = user.course;
+      sectionEl.textContent = user.section;
+  
+      // Set current date
       const today = new Date();
-      const formattedDate = `${today.toLocaleString('en-US', { month: 'long' })} ${today.getDate()}, ${today.getFullYear()}`;
-      document.getElementById('attendanceTitle').textContent = `Attendance of ${formattedDate}`;
-
+      const formattedDate = today.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+      dateDisplay.textContent = formattedDate;
+      attendanceTitle.textContent = `Attendance for ${user.section}`;
+  
+      // Fetch classmates data
+      fetchClassmates();
+    }
+  
+    // Fetch classmates data
+    function fetchClassmates() {
       const formData = new FormData();
       formData.append('action', 'getClassmates');
       formData.append('section', user.section);
-      formData.append('course', user.course);  
-
+      formData.append('course', user.course);
+  
       fetch(scriptURL, { method: 'POST', body: formData })
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           if (data.success) {
             classmatesData = data.classmates;
-            classmatesData.sort((a, b) => a.full_name.localeCompare(b.full_name));  
+            classmatesData.sort((a, b) => a.full_name.localeCompare(b.full_name));
             renderTable(classmatesData);
+          } else {
+            console.error('Error fetching classmates:', data.message);
+            classmateTable.innerHTML = `<tr><td colspan="6" style="text-align: center;">Failed to load classmates data.</td></tr>`;
           }
+        })
+        .catch((error) => {
+          console.error('Error fetching classmates:', error);
+          classmateTable.innerHTML = `<tr><td colspan="6" style="text-align: center;">Error fetching data. Please try again later.</td></tr>`;
         });
     }
-
+  
+    // Format timestamp
     function formatTimestamp(timestamp) {
-      if (!timestamp) return "";
+      if (!timestamp) return 'Not recorded';
       const date = new Date(timestamp);
-      if (isNaN(date)) return "";
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const seconds = String(date.getSeconds()).padStart(2, '0');
-      return `${year}-${month}-${day} / ${hours}:${minutes}:${seconds}`;
+      if (isNaN(date)) return 'Invalid date';
+  
+      return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
     }
-
+  
+    // Render table with data
     function renderTable(data) {
-      const table = document.querySelector("#classmateTable tbody");
-      const studentCount = document.getElementById('studentCount');
-      table.innerHTML = "";
-
+      classmateTable.innerHTML = '';
+  
       if (data.length === 0) {
-        table.innerHTML = `<tr class="no-data"><td colspan="6">No students found.</td></tr>`;
-        studentCount.textContent = "Showing 0 students";
+        classmateTable.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 1rem; color: #666;">
+              No students found matching your criteria
+            </td>
+          </tr>
+        `;
+        studentCount.textContent = 'Showing 0 students';
         return;
       }
-
-      data.forEach(stu => {
-        const formattedTimestamp = formatTimestamp(stu.timestamp);
-        const row = `<tr>
-          <td>${stu.full_name}</td>
-          <td>${stu.student_id}</td>
-          <td>${stu.course}</td>
-          <td>${stu.section}</td>
-          <td>${stu.status}</td>
-          <td>${formattedTimestamp}</td>
-        </tr>`;
-        table.innerHTML += row;
+  
+      data.forEach((student) => {
+        const row = document.createElement('tr');
+        const statusClass = student.status.toLowerCase() === 'present' ? 'status-present' : 'status-absent';
+  
+        // For mobile view, we'll use data attributes
+        row.innerHTML = `
+          <td data-label="Name">${student.full_name}</td>
+          <td data-label="ID">${student.student_id}</td>
+          <td data-label="Course">${student.course}</td>
+          <td data-label="Section">${student.section}</td>
+          <td data-label="Status"><span class="status-badge ${statusClass}">${student.status}</span></td>
+          <td data-label="Time">${formatTimestamp(student.timestamp)}</td>
+        `;
+  
+        classmateTable.appendChild(row);
       });
-
+  
       studentCount.textContent = `Showing ${data.length} ${data.length === 1 ? 'student' : 'students'}`;
     }
-
+  
+    // Apply filters to table
     function applyFilters() {
-  const searchTerm = document.getElementById('searchInput').value.toLowerCase();  
-  const statusFilter = document.getElementById('statusFilter').value;  
-
-  const filteredData = classmatesData.filter(student => {  
-    const matchesSearch = student.full_name.toLowerCase().includes(searchTerm) || student.student_id.toString().includes(searchTerm);  
-    
-    let matchesStatus = false;
-    let matchesTimestamp = false;
-
-    if (statusFilter === 'all') {
-      matchesStatus = true; 
-      matchesTimestamp = true;
-    } else if (statusFilter === 'present') {
-    
-      matchesStatus = student.status.toLowerCase() === 'present';
-      matchesTimestamp = student.timestamp !== ""; 
-    } else if (statusFilter === 'absent') {
-
-      matchesStatus = student.status === "";
-      matchesTimestamp = student.timestamp === ""; 
+      const searchTerm = searchInput.value.toLowerCase();
+      const statusFilterValue = statusFilter.value;
+  
+      const filteredData = classmatesData.filter((student) => {
+        const matchesSearch =
+          student.full_name.toLowerCase().includes(searchTerm) ||
+          student.student_id.toString().includes(searchTerm);
+  
+        let matchesStatus = false;
+  
+        if (statusFilterValue === 'all') {
+          matchesStatus = true;
+        } else if (statusFilterValue === 'present') {
+          matchesStatus = student.status && student.status.toLowerCase() === 'present';
+        } else if (statusFilterValue === 'absent') {
+          matchesStatus = !student.status || student.status.toLowerCase() === 'absent';
+        }
+  
+        return matchesSearch && matchesStatus;
+      });
+  
+      renderTable(filteredData);
     }
-
-    return matchesSearch && matchesStatus && matchesTimestamp;  
-  });
-
-  renderTable(filteredData);  
-}
-
-document.getElementById('searchInput').addEventListener('input', applyFilters);  
-document.getElementById('statusFilter').addEventListener('change', applyFilters);
-
-
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      localStorage.removeItem('user');
-      window.location.href = 'index.html';
-    });
-    document.getElementById('qrcodeBtn').addEventListener('click', () => {
-      window.location.href = 'qr-code.html';
-    });
-
-    document.getElementById('downloadBtn').addEventListener('click', () => {
+  
+    // Generate PDF
+    function generatePDF() {
+      if (!classmatesData.length) {
+        alert('No data available to generate PDF.');
+        return;
+      }
+  
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
   
-    
+      // Get current date
       const today = new Date();
-      const formattedDate = `${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}-${today.getFullYear()}`;
-
-      const section = user.section;
-
-      const fileName = `attendance_${section}_${formattedDate}.pdf`;
-
-
-      doc.text(`Attendance Report of ${formattedDate}`, 20, 10);
-      doc.text(`Section: ${section}`, 20, 20);
-
-      
-      const tableColumn = ["Student ID", "Student Name", "Course", "Status", "Timestamp"];
-      const tableRows = classmatesData.map(student => [
-        student.student_id,
+      const formattedDate = today.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+  
+      // Set filename
+      const fileName = `Attendance_${user.section}_${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}.pdf`;
+  
+      // Add title and date
+      doc.setFontSize(16);
+      doc.setTextColor(40);
+      doc.text(`Attendance Report - ${user.section}`, 14, 20);
+      doc.setFontSize(12);
+      doc.text(`Generated on: ${formattedDate}`, 14, 28);
+  
+      // Prepare table data
+      const tableColumn = ['Name', 'ID', 'Course', 'Status', 'Timestamp'];
+      const tableRows = classmatesData.map((student) => [
         student.full_name,
+        student.student_id,
         student.course,
         student.status,
-        formatTimestamp(student.timestamp)
+        formatTimestamp(student.timestamp),
       ]);
-
+  
+      // Add table
       doc.autoTable({
         head: [tableColumn],
         body: tableRows,
-        startY: 30,
-        theme: 'grid'
+        startY: 35,
+        theme: 'grid',
+        headStyles: {
+          fillColor: [67, 97, 238],
+          textColor: 255,
+          fontStyle: 'bold',
+        },
+        alternateRowStyles: {
+          fillColor: [240, 240, 255],
+        },
+        margin: { top: 30 },
       });
-
-   
+  
+      // Save PDF
       doc.save(fileName);
+    }
+  
+    // Event Listeners
+    toggleSidebarBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('visible');
+      sidebarOverlay.classList.toggle('visible');
+      document.body.style.overflow = sidebar.classList.contains('visible') ? 'hidden' : 'auto';
     });
-
-    document.getElementById('sortBtn').addEventListener('click', () => {
-      classmatesData.sort((a, b) => a.full_name.localeCompare(b.full_name));  
-      renderTable(classmatesData);
+  
+    sidebarOverlay.addEventListener('click', () => {
+      sidebar.classList.remove('visible');
+      sidebarOverlay.classList.remove('visible');
+      document.body.style.overflow = 'auto';
     });
-
-    document.addEventListener('contextmenu', function(e) {
-  e.preventDefault();
-});
-document.addEventListener('touchstart', function(e) {
-  if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'SELECT') {
-    e.preventDefault();
-  }
-}, { passive: false });
-['copy', 'cut', 'paste'].forEach(evt =>
-  document.addEventListener(evt, function(e) {
-    e.preventDefault();
-  })
-);
+  
+    searchInput.addEventListener('input', applyFilters);
+    statusFilter.addEventListener('change', applyFilters);
+  
+    qrcodeBtn.addEventListener('click', () => {
+      window.location.href = 'qr-code.html';
+    });
+  
+    downloadBtn.addEventListener('click', generatePDF);
+  
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('user');
+      window.location.href = 'LogIn.html';
+    });
+  
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', (event) => {
+      if (window.innerWidth <= 768) {
+        if (!sidebar.contains(event.target) && !toggleSidebarBtn.contains(event.target)) {
+          sidebar.classList.remove('visible');
+          sidebarOverlay.classList.remove('visible');
+          document.body.style.overflow = 'auto';
+        }
+      }
+    });
+  
+    // Initialize dashboard
+    initDashboard();
   </script>
 </body>
 </html>
