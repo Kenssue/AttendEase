@@ -437,7 +437,7 @@
         <div class="form-group">
           <div class="input-field">
             <i class="fas fa-user"></i>
-            <input type="text" name="username" placeholder="Full Name (Ex. Bautista, John)" required>
+            <input type="text" name="username" placeholder="Lastname, Firstname" required>
           </div>
         </div>
         
@@ -565,7 +565,7 @@
     }
 
     // Form submissions
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzIiMtszdwXhVlh1LRyquV-pusjujcc_KTAnlu3h819KofHfnvCGSvbytfUh8cornVi/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzvH2iCX0S5c5Q2BTZFAi4QdXzln4aLL_MoNJ9vCZ2ysR3q_NO2dZNC7tYR8ccMnamI/exec';
 
     // Register form
     document.getElementById('registerForm').addEventListener('submit', e => {
@@ -595,12 +595,12 @@
       } else if (msg === 'Email is already registered.') {
         messageElement.textContent = "This email is already registered.";
         messageElement.className = "message error";
-      } else if (msg === 'Registered successfully.') {
-        messageElement.textContent = "Account created successfully! Redirecting...";
+      } else if (msg === 'Registration successful, Admin is activating your account, please wait. Reloading...') {
+        messageElement.textContent = "Registration successful, Admin is activating your account, please wait. Reloading...";
         messageElement.className = "message success";
         setTimeout(() => {
           window.location.href = 'LogIn.html';
-        }, 1500);
+        }, 4500);
       } else {
         messageElement.textContent = "Unexpected response: " + msg;
         messageElement.className = "message error";
