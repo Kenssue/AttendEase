@@ -586,6 +586,8 @@
       }
     }
   </style>
+
+
 </head>
 <body>
   <div class="dashboard-container">
@@ -793,7 +795,6 @@
         const row = document.createElement('tr');
         const statusClass = student.status.toLowerCase() === 'present' ? 'status-present' : 'status-absent';
   
-        // For mobile view, we'll use data attributes
         row.innerHTML = `
           <td data-label="Name">${student.full_name}</td>
           <td data-label="ID">${student.student_id}</td>
@@ -845,7 +846,6 @@
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
   
-      // Get current date
       const today = new Date();
       const formattedDate = today.toLocaleDateString('en-US', {
         year: 'numeric',
@@ -855,17 +855,14 @@
         minute: '2-digit',
       });
   
-      // Set filename
       const fileName = `Attendance_${user.section}_${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}.pdf`;
   
-      // Add title and date
       doc.setFontSize(16);
       doc.setTextColor(40);
       doc.text(`Attendance Report - ${user.section}`, 14, 20);
       doc.setFontSize(12);
       doc.text(`Generated on: ${formattedDate}`, 14, 28);
   
-      // Prepare table data
       const tableColumn = ['Name', 'ID', 'Course', 'Status', 'Timestamp'];
       const tableRows = classmatesData.map((student) => [
         student.full_name,
@@ -875,7 +872,6 @@
         formatTimestamp(student.timestamp),
       ]);
   
-      // Add table
       doc.autoTable({
         head: [tableColumn],
         body: tableRows,
@@ -892,11 +888,9 @@
         margin: { top: 30 },
       });
   
-      // Save PDF
       doc.save(fileName);
     }
   
-    // Event Listeners
     toggleSidebarBtn.addEventListener('click', () => {
       sidebar.classList.toggle('visible');
       sidebarOverlay.classList.toggle('visible');
@@ -923,7 +917,6 @@
       window.location.href = 'LogIn.html';
     });
   
-    // Close sidebar when clicking outside on mobile
     document.addEventListener('click', (event) => {
       if (window.innerWidth <= 768) {
         if (!sidebar.contains(event.target) && !toggleSidebarBtn.contains(event.target)) {
@@ -934,18 +927,22 @@
       }
     });
 
-    // Handle window resize
     window.addEventListener('resize', () => {
       if (window.innerWidth > 768) {
-        // On larger screens, ensure sidebar is visible
         sidebar.classList.remove('visible', 'hidden');
         sidebarOverlay.classList.remove('visible');
         document.body.style.overflow = 'auto';
       } else {
-        // On smaller screens, hide sidebar if not already visible
         if (!sidebar.classList.contains('visible')) {
           sidebar.classList.add('hidden');
         }
+      }
+    });
+
+    // Prevent back navigation after logout
+    window.addEventListener('pageshow', (event) => {
+      if (!localStorage.getItem('user')) {
+        window.location.href = 'LogIn.html';
       }
     });
   
