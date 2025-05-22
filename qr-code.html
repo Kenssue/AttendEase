@@ -487,7 +487,7 @@
     function downloadQRCode() {
       const canvas = document.getElementById('qrCodeCanvas');
       const user = JSON.parse(localStorage.getItem('user'));
-      const fileName = `SecureQR_${user.student_id}.png`;
+      const fileName = `QR_CODE_Don't_not_share.png`;
       
       const link = document.createElement('a');
       link.href = canvas.toDataURL('image/png');
