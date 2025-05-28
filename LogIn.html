@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="icon" href="logo.png" type="image/x-icon">
   <script src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
+  <!-- Updated reCAPTCHA script -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <style>
     :root {
       --primary: #4361ee;
@@ -435,41 +437,42 @@
     <div class="form-section register-section">
       <h2>Create Account</h2>
       <form id="registerForm">
-        <div class="form-group">
+        <div class="form-group" style="animation-delay: 0.2s;">
           <div class="input-field">
             <i class="fas fa-user"></i>
-            <input type="text" name="username" placeholder="Lastname, Firstname" required>
+            <input type="text" name="username" placeholder="Lastname, Firstname" required aria-label="Full Name">
           </div>
         </div>
         
-        <div class="form-group">
+        <div class="form-group" style="animation-delay: 0.4s;">
           <div class="input-field">
             <i class="fas fa-id-card"></i>
-            <input type="text" name="studentId" placeholder="Student ID" required>
+            <input type="text" name="studentId" placeholder="Student ID" required aria-label="Student ID">
           </div>
         </div>
         
-        <div class="form-group">
+        <div class="form-group" style="animation-delay: 0.6s;">
           <div class="input-field">
             <i class="fas fa-envelope"></i>
-            <input type="email" name="email" placeholder="Email (Ex. student@email.com)" required>
+            <input type="email" name="email" placeholder="Email (Ex. student@email.com)" required aria-label="Email">
           </div>
         </div>
         
-        <div class="form-group">
+        <div class="form-group" style="animation-delay: 0.8s;">
           <div class="input-field password-container">
             <i class="fas fa-lock"></i>
-            <input type="password" id="registerPassword" name="password" placeholder="Password" required>
-            <span class="password-toggle" onclick="togglePassword('registerPassword', this)">
+            <input type="password" id="registerPassword" name="password" placeholder="Password" required aria-label="Password">
+            <button type="button" class="password-toggle" onclick="togglePassword('registerPassword', this)" aria-label="Toggle password visibility">
               <i class="far fa-eye"></i>
-            </span>
+            </button>
           </div>
+          <div id="passwordStrength" class="strength-meter"></div>
         </div>
         
-        <div class="form-group">
+        <div class="form-group" style="animation-delay: 1s;">
           <div class="input-field">
             <i class="fas fa-graduation-cap"></i>
-            <select id="course" name="course" required>
+            <select id="course" name="course" required aria-label="Course">
               <option value="" disabled selected>Select Course</option>
               <option value="BECEd">BECEd</option>
               <option value="BEEd">BEEd</option>
@@ -479,14 +482,19 @@
           </div>
         </div>
         
-        <div class="form-group">
+        <div class="form-group" style="animation-delay: 1.2s;">
           <div class="input-field">
             <i class="fas fa-users"></i>
-            <input type="text" name="section" placeholder="Section" required>
+            <input type="text" name="section" placeholder="Section" required aria-label="Section">
           </div>
         </div>
+
+        <!-- Updated reCAPTCHA -->
+        <div class="form-group" style="animation-delay: 1.4s;">
+          <div class="g-recaptcha" data-sitekey="6LfgnE0rAAAAACY4cQ3SVQW9C_uoq_9JHHDZAeeN" data-callback="enableRegisterButton"></div>
+        </div>
         
-        <button type="submit" class="btn btn-secondary">
+        <button type="submit" id="registerBtn" class="btn btn-secondary" disabled>
           <i class="fas fa-user-plus"></i> Register
         </button>
         
@@ -498,38 +506,50 @@
     <div class="form-section login-section">
       <h2>Welcome!</h2>
       <form id="loginForm">
-        <div class="form-group">
+        <div class="form-group" style="animation-delay: 0.2s;">
           <div class="input-field">
             <i class="fas fa-id-card"></i>
-            <input type="text" name="studentId" placeholder="Student ID" required>
+            <input type="text" name="studentId" placeholder="Student ID" required aria-label="Student ID">
           </div>
         </div>
         
-        <div class="form-group">
+        <div class="form-group" style="animation-delay: 0.4s;">
           <div class="input-field">
             <i class="fas fa-envelope"></i>
-            <input type="email" name="email" placeholder="Email" required>
+            <input type="email" name="email" placeholder="Email" required aria-label="Email">
           </div>
         </div>
         
-        <div class="form-group">
+        <div class="form-group" style="animation-delay: 0.6s;">
           <div class="input-field password-container">
             <i class="fas fa-lock"></i>
-            <input type="password" id="loginPassword" name="password" placeholder="Password" required>
-            <span class="password-toggle" onclick="togglePassword('loginPassword', this)">
+            <input type="password" id="loginPassword" name="password" placeholder="Password" required aria-label="Password">
+            <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)" aria-label="Toggle password visibility">
               <i class="far fa-eye"></i>
-            </span>
+            </button>
           </div>
         </div>
+
+        <!-- Remember me checkbox -->
+        <div class="form-group" style="animation-delay: 0.8s;">
+          <label class="remember-me">
+            <input type="checkbox" name="remember"> Remember me
+          </label>
+        </div>
+
+        <!-- Updated reCAPTCHA -->
+        <div class="form-group" style="animation-delay: 1s;">
+          <div class="g-recaptcha" data-sitekey="6LfgnE0rAAAAACY4cQ3SVQW9C_uoq_9JHHDZAeeN" data-callback="enableLoginButton"></div>
+        </div>
         
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" id="loginBtn" class="btn btn-primary" disabled>
           <i class="fas fa-sign-in-alt"></i> Login
         </button>
         
         <p id="loginMessage" class="message"></p>
         
-        <div class="forgot-password">
-          <a href="changepass.html">
+        <div class="forgot-password" style="animation-delay: 1.2s;">
+          <a href="changepass.html" aria-label="Forgot password">
             <i class="fas fa-key"></i> Forgot Password?
           </a>
         </div>
@@ -553,6 +573,15 @@
       }
     });
 
+    // Enable buttons when CAPTCHA is completed
+    function enableRegisterButton() {
+      document.getElementById('registerBtn').disabled = false;
+    }
+    
+    function enableLoginButton() {
+      document.getElementById('loginBtn').disabled = false;
+    }
+
     // Toggle Password Visibility
     function togglePassword(id, eyeIcon) {
       const input = document.getElementById(id);
@@ -565,101 +594,119 @@
       }
     }
 
+    // Password strength indicator
+    document.getElementById('registerPassword')?.addEventListener('input', function() {
+      const strengthMeter = document.getElementById('passwordStrength');
+      const strength = calculatePasswordStrength(this.value);
+      
+      strengthMeter.style.width = `${strength}%`;
+      strengthMeter.style.backgroundColor = 
+        strength < 30 ? 'red' : 
+        strength < 70 ? 'orange' : 'green';
+    });
+
+    function calculatePasswordStrength(password) {
+      let strength = 0;
+      if (password.length > 7) strength += 30;
+      if (/[A-Z]/.test(password)) strength += 20;
+      if (/[0-9]/.test(password)) strength += 20;
+      if (/[^A-Za-z0-9]/.test(password)) strength += 30;
+      return Math.min(strength, 100);
+    }
+
     // Form submissions
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwHF98p7BT3HkrgOUW3NSkRDs3KodkLjqg7yFpi_b35LoZeWjitZChQ6hmjJAn-NPW0/exec';
 
     // Register form
-    document.getElementById('registerForm').addEventListener('submit', e => {
-  e.preventDefault();
-  const form = e.target;
-  const formData = new FormData(form);
-  const messageElement = document.getElementById('message');
-
-  formData.append('action', 'register');
-  messageElement.textContent = "Creating account...";
-  messageElement.className = "message";
-  messageElement.style.display = "block";
-
-  const submitBtn = form.querySelector('button');
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-
-  fetch(scriptURL, { method: 'POST', body: formData })
-    .then(res => res.text())
-    .then(msg => {
-      if (msg === 'Student ID is already registered.') {
-        messageElement.textContent = "This Student ID is already registered.";
-        messageElement.className = "message error";
-      } else if (msg === 'Name is already taken.') {
-        messageElement.textContent = "This name is already taken.";
-        messageElement.className = "message error";
-      } else if (msg === 'Email is already registered.') {
-        messageElement.textContent = "This email is already registered.";
-        messageElement.className = "message error";
-      } else if (msg === 'Registration successful, Admin is activating your account, please wait. Reloading...') {
-        messageElement.textContent = "Registration successful, Admin is activating your account, please wait. Reloading...";
-        messageElement.className = "message success";
-        setTimeout(() => {
-          window.location.href = 'LogIn.html';
-        }, 4500);
-      } else {
-        messageElement.textContent = "Unexpected response: " + msg;
-        messageElement.className = "message error";
-      }
-    })
-    .catch(error => {
-      messageElement.textContent = "An error occurred. Please try again.";
-      messageElement.className = "message error";
-    })
-    .finally(() => {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Register';
-    });
-});
-
-
-    // Login form
-    document.getElementById('loginForm').addEventListener('submit', e => {
+    document.getElementById('registerForm')?.addEventListener('submit', async e => {
       e.preventDefault();
       const form = e.target;
-      const formData = new FormData(form);
-      const messageElement = document.getElementById('loginMessage');
-      
-      formData.append('action', 'login');
-      messageElement.textContent = "Authenticating...";
-      messageElement.className = "message";
-      messageElement.style.display = "block";
-
-      // Disable button during submission
+      const messageElement = document.getElementById('message');
       const submitBtn = form.querySelector('button');
-      submitBtn.disabled = true;
+      
+      // Show loading state
       submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-
-      fetch(scriptURL, { method: 'POST', body: formData })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            messageElement.textContent = "Login successful! Redirecting...";
-            messageElement.className = "message success";
-            localStorage.setItem('user', JSON.stringify(data));
-            setTimeout(() => {
-              window.location.href = 'dashboard.html';
-            }, 1000);
-          } else {
-            messageElement.textContent = data.message || "Invalid credentials";
-            messageElement.className = "message error";
-          }
-        })
-        .catch(error => {
-          console.error('Error during login:', error);
-          messageElement.textContent = "An error occurred. Please try again.";
-          messageElement.className = "message error";
-        })
-        .finally(() => {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
-        });
+      submitBtn.disabled = true;
+      
+      try {
+        const formData = new FormData(form);
+        formData.append('action', 'register');
+        
+        const response = await fetch(scriptURL, { method: 'POST', body: formData });
+        const msg = await response.text();
+        
+        if (msg === 'Student ID is already registered.') {
+          showMessage(messageElement, "This Student ID is already registered.", 'error');
+        } else if (msg === 'Name is already taken.') {
+          showMessage(messageElement, "This name is already taken.", 'error');
+        } else if (msg === 'Email is already registered.') {
+          showMessage(messageElement, "This email is already registered.", 'error');
+        } else if (msg.includes('successful')) {
+          showMessage(messageElement, msg, 'success');
+          setTimeout(() => window.location.href = 'LogIn.html', 4500);
+        } else {
+          showMessage(messageElement, "Unexpected response: " + msg, 'error');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showMessage(messageElement, "An error occurred. Please try again.", 'error');
+      } finally {
+        submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Register';
+        submitBtn.disabled = false;
+        grecaptcha.reset();
+        document.getElementById('registerBtn').disabled = true;
+      }
     });
+
+    // Login form
+    document.getElementById('loginForm')?.addEventListener('submit', async e => {
+      e.preventDefault();
+      const form = e.target;
+      const messageElement = document.getElementById('loginMessage');
+      const submitBtn = form.querySelector('button');
+      
+      // Show loading state
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+      submitBtn.disabled = true;
+      
+      try {
+        const formData = new FormData(form);
+        formData.append('action', 'login');
+        
+        const response = await fetch(scriptURL, { method: 'POST', body: formData });
+        const data = await response.json();
+        
+        if (data.success) {
+          showMessage(messageElement, "Login successful! Redirecting...", 'success');
+          localStorage.setItem('user', JSON.stringify(data));
+          setTimeout(() => window.location.href = 'dashboard.html', 1000);
+        } else {
+          showMessage(messageElement, data.message || "Invalid credentials", 'error');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showMessage(messageElement, "An error occurred. Please try again.", 'error');
+      } finally {
+        submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+        submitBtn.disabled = false;
+        grecaptcha.reset();
+        document.getElementById('loginBtn').disabled = true;
+      }
+    });
+
+    function showMessage(element, text, type) {
+      element.textContent = text;
+      element.className = `message ${type}`;
+      element.style.display = "block";
+    }
+
+    // Reduced motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('*').forEach(el => {
+        el.style.animation = 'none !important';
+        el.style.transition = 'none !important';
+      });
+    }
   </script>
 </body>
 </html>
